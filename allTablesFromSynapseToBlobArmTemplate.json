@@ -4,7 +4,7 @@
     "parameters": {
         "factoryName": {
             "type": "string",
-            "metadata": "The name of data factory can contain only letters, numbers and hyphens. The first and last characters must be a letter or number. Spaces are not allowed.",
+            "metadata": "Data Factory name",
             "defaultValue": "synapsetoblobadf"
         },
         "location": {
@@ -59,15 +59,24 @@
         },
         "schemaName": {
             "type": "string",
-            "defaultValue": "covid"
+            "defaultValue": "covid",
+            "metadata": {
+            "description": "Enter schema that whose tables you want to dump into blob storage."
+            }
             },
         "containerName": {
             "type": "string",
-            "defaultValue": "synapsesqlpooldata"
+            "defaultValue": "synapsesqlpooldata",
+            "metadata": {
+            "description": "Enter name of the container where you want to dump the data."
+            }
             },
          "emailForAlerts": {
             "type": "String",
-            "defaultValue": "assadullah@emumba.com"
+            "defaultValue": "assadullah@emumba.com",
+            "metadata": {
+            "description": "Enter email address where you want to send alerts."
+            }
         }
     },
     "variables": {
@@ -300,7 +309,7 @@
                             },
                             "activities": [
                                 {
-                                    "name": "copyDataFromSynapseToBlob",
+                                    "name": "Copy data1",
                                     "type": "Copy",
                                     "dependsOn": [],
                                     "policy": {

@@ -1,0 +1,482 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "synapsetoblobadf"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus",
+            "metadata": {
+            "description": "Location of your resources. Default location is eastUS"
+            }
+         },
+
+          "existingOrNewStorage": {
+            "allowedValues": [ "new", "existing" ],
+            "type": "string",
+            "metadata": {
+                "description": "Do you want to create new storage account or use same storage account?"
+            }
+        },
+
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+            "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
+            }
+        },
+        
+        "sqlDBPoolName": {
+            "type": "string",
+            "defaultValue": "synapsesqlpool",
+            "metadata": {
+            "description": "Database name should not match special patterns,The value has a length of at most 115. Database name should not contain reserved words.No database with the same name exists in the server"
+            }
+        },
+        "synapseWorkSpaceName": {
+            "type": "string",
+            "defaultValue": "testsynapsews",
+            "metadata": {
+            "description": "Server name must be at least 1 characters and at most 50 characters. Server name must only contain lowercase letters, numbers, and hyphens. The server name must not start or end in a hyphen."
+            } 
+        },
+
+       "administratorLogin": {
+             "type": "string",
+             "metadata": {
+             "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.). "
+             }
+        },
+       "administratorLoginPassword": {
+            "type": "securestring",
+             "metadata": {
+             "description": "Your password must be at least 8 characters in length. It must be no more than 128 characters in length.Your password must contain characters from three of the following categories – English uppercase letters, English lowercase letters, numbers (0-9), and non-alphanumeric characters (!, $, #, %, etc.). Your password cannot contain all or part of the login name. Part of a login name is defined as three or more consecutive alphanumeric characters."
+              }
+        },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "synapsesqlpooldata",
+            "metadata": {
+            "description": "Enter name of the container where you want to dump the data."
+            }
+            },
+         "emailForAlerts": {
+            "type": "String",
+            "defaultValue": "assadullah@emumba.com",
+            "metadata": {
+            "description": "Enter email address where you want to send alerts."
+            }
+        }
+    },
+    "variables": {
+        "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
+        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+        "fullyQualifiedDomainName": ".sql.azuresynapse.net",
+        "actionGroupsName":"emailAlerts"
+    },
+    "resources": [
+
+         {
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('factoryName')]",
+            "location": "[parameters('location')]",
+            "properties": {},
+            "identity": {
+                "type": "SystemAssigned"
+                 }
+        },
+
+        {
+            "condition": "[equals(parameters('existingOrNewStorage'),'new')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                 "name": "Standard_LRS"
+                },
+            "kind": "StorageV2",
+            "properties": {}
+       },
+
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureBlobStorageLinkedService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(variables('storageAccountId'), '2019-06-01').keys[0].value)]"
+                },
+                "connectVia": {
+                    "referenceName": "AutoResolveIntegrationRuntime",
+                    "type": "IntegrationRuntimeReference"
+                }
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDW",
+                "typeProperties": {
+                    "connectionString": "[concat('Server=tcp:',parameters('synapseWorkSpaceName'), variables('fullyQualifiedDomainName'), ',1433;Initial Catalog=', parameters('sqlDBPoolName'), ';User Id=', parameters('administratorLogin'), '@', parameters('synapseWorkSpaceName'), ';Password=', parameters('administratorLoginPassword'), ';Trusted_Connection=False;Encrypt=True;Connection Timeout=30;MultipleActiveResultSets=True')]"
+                },
+                "connectVia": {
+                    "referenceName": "AutoResolveIntegrationRuntime",
+                    "type": "IntegrationRuntimeReference"
+                }
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+            "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "type": "Managed",
+                "typeProperties": {
+                    "computeProperties": {
+                        "location": "AutoResolve",
+                        "dataFlowProperties": {
+                            "computeType": "General",
+                            "coreCount": 8,
+                            "timeToLive": 0
+                        }
+                    }
+                }
+            },
+            "dependsOn": ["[parameters('factoryName')]"]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureSynapseAnalyticsLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "tableName": {
+                        "type": "string"
+                    },
+                    "schemaName": {
+                        "type": "string"
+                    }
+                },
+                "annotations": [],
+                "type": "AzureSqlDWTable",
+                "schema": [],
+                "typeProperties": {
+                    "schema": {
+                        "value": "@dataset().schemaName",
+                        "type": "Expression"
+                    },
+                    "table": {
+                        "value": "@dataset().tableName",
+                        "type": "Expression"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalyticsLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/BlobData')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "containerName": {
+                        "type": "string"
+                    },
+                    "datasetName": {
+                        "type": "string"
+                    }
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().datasetName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().containerName",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+            ]
+        },
+
+         {
+            "name": "[concat(parameters('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlob')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "get-tables",
+                        "type": "Lookup",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "SqlDWSource",
+                                "sqlReaderQuery": {
+                                    "value": "select * from synapsesqlpool.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'",
+                                    "type": "Expression"
+                                },
+                                "queryTimeout": "02:00:00",
+                                "partitionOption": "None"
+                            },
+                            "dataset": {
+                                "referenceName": "AzureSynapseAnalyticsTable",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "tableName": "value from query",
+                                    "schemaName": "value from quwry"
+                                }
+                            },
+                            "firstRowOnly": false
+                        }
+                    },
+                    {
+                        "name": "copy-each-table",
+                        "type": "ForEach",
+                        "dependsOn": [
+                            {
+                                "activity": "get-tables",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@activity('get-tables').output.value",
+                                "type": "Expression"
+                            },
+                            "activities": [
+                                {
+                                    "name": "Copy data1",
+                                    "type": "Copy",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "7.00:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "source": {
+                                            "type": "SqlDWSource",
+                                            "queryTimeout": "02:00:00",
+                                            "partitionOption": "None"
+                                        },
+                                        "sink": {
+                                            "type": "DelimitedTextSink",
+                                            "storeSettings": {
+                                                "type": "AzureBlobStorageWriteSettings"
+                                            },
+                                            "formatSettings": {
+                                                "type": "DelimitedTextWriteSettings",
+                                                "quoteAllText": true,
+                                                "fileExtension": ".txt"
+                                            }
+                                        },
+                                        "enableStaging": false,
+                                        "translator": {
+                                            "type": "TabularTranslator",
+                                            "typeConversion": true,
+                                            "typeConversionSettings": {
+                                                "allowDataTruncation": true,
+                                                "treatBooleanAsNumber": false
+                                            }
+                                        }
+                                    },
+                                    "inputs": [
+                                        {
+                                            "referenceName": "AzureSynapseAnalyticsTable",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "tableName": {
+                                                    "value": "@item().Table_Name",
+                                                    "type": "Expression"
+                                                },
+                                                "schemaName": {
+                                                    "value": "@item().table_schema",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "outputs": [
+                                        {
+                                            "referenceName": "BlobData",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "containerName": {
+                                                    "value": "@pipeline().parameters.containerName",
+                                                    "type": "Expression"
+                                                },
+                                                "datasetName": {
+                                                    "value": "@concat(item().table_schema,'_',item().table_name,'.csv')",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "parameters": {
+                    "containerName": {
+                        "type": "string",
+                        "defaultValue": "[parameters('containerName')]"
+                    }
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-02-11T08:36:52Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
+                "[concat(variables('factoryId'), '/datasets/BlobData')]"
+            ]
+        },
+
+        
+        {
+            "type": "microsoft.insights/actionGroups",
+            "apiVersion": "2019-03-01",
+            "name": "[variables('actionGroupsName')]",
+            "location": "Global",
+            "properties": {
+                "groupShortName": "alertAsad",
+                "enabled": true,
+                "emailReceivers": [
+                    {
+                        "name": "AlertsOnEmail",
+                        "emailAddress": "[parameters('emailForAlerts')]",
+                        "useCommonAlertSchema": false
+                    }
+                ],
+                "smsReceivers": [],
+                "webhookReceivers": [],
+                "itsmReceivers": [],
+                "azureAppPushReceivers": [],
+                "automationRunbookReceivers": [],
+                "voiceReceivers": [],
+                "logicAppReceivers": [],
+                "azureFunctionReceivers": []
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
+                "[concat(variables('factoryId'), '/datasets/BlobData')]"
+            ]
+        },
+        {
+            "type": "Microsoft.Insights/metricalerts",
+            "apiVersion": "2018-03-01",
+            "name": "AlertOnSucceededPipeline",
+            "location": "global",
+            "dependsOn": [
+                "[resourceId('microsoft.insights/actionGroups', variables('actionGroupsName'))]"
+            ],
+            "properties": {
+                "description": "The Data is dumped successfully",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                    "[variables('factoryId')]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT1M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "37fdbd66-4a5e-44a5-8d46-964dbd36bb78",
+                            "metricNamespace": "Microsoft.DataFactory/factories",
+                            "metricName": "PipelineSucceededRuns",
+                            "dimensions": [
+                                {
+                                    "name": "Name",
+                                    "operator": "Include",
+                                    "values": [
+                                        "AllTablesOfAllScehmasFromSynapseToBlob"
+                                    ]
+                                },
+                                {
+                                    "name": "FailureType",
+                                    "operator": "Include",
+                                    "values": [
+                                        "none"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Total",
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "targetResourceType": "microsoft.datafactory/factories",
+                "actions": [
+                    {
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', variables('actionGroupsName'))]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        }
+    ]
+}

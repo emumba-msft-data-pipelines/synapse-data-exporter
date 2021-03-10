@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
@@ -73,17 +73,12 @@
             "type": "string",
             "defaultValue": "covid_british_columbia.csv"
             },
-        "actionGroupsName": {
-            "type": "String",
-            "metadata": {
-             "description": "The name can contain letters, numbers, and special characters, this can start or end with any number, letter or other special charactor"
-            }
-        },
          "emailForAlerts": {
             "type": "String"
         }
     },
     "variables": {
+        "actionGroupsName":"actionalerts",
         "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
         "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
         "fullyQualifiedDomainName": ".sql.azuresynapse.net"
@@ -447,7 +442,7 @@
             {
             "type": "microsoft.insights/actionGroups",
             "apiVersion": "2019-03-01",
-            "name": "[parameters('actionGroupsName')]",
+            "name": "[variables('actionGroupsName')]",
             "location": "Global",
             "properties": {
                 "groupShortName": "alertAsad",
@@ -480,7 +475,7 @@
             "name": "AlertOnSucceededPipeline",
             "location": "global",
             "dependsOn": [
-                "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]"
+                "[resourceId('microsoft.insights/actionGroups', variables('actionGroupsName'))]"
             ],
             "properties": {
                 "description": "The Data is dumped successfully",
@@ -524,7 +519,7 @@
                 "targetResourceType": "microsoft.datafactory/factories",
                 "actions": [
                     {
-                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', parameters('actionGroupsName'))]",
+                        "actionGroupId": "[resourceId('microsoft.insights/actionGroups', variables('actionGroupsName'))]",
                         "webHookProperties": {}
                     }
                 ]

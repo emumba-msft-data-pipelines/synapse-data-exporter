@@ -403,7 +403,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{pipeline().parameters.tableName}\"\n}",
+                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
                                 "type": "Expression"
                             }
                         }

@@ -75,6 +75,10 @@
             },
          "emailForAlerts": {
             "type": "String"
+        },
+        "logicAppName": {
+            "defaultValue": "TeamsNotify",
+            "type": "String"
         }
     },
     "variables": {
@@ -205,7 +209,7 @@
                 "[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalyticsLinkedService')]"
             ]
         },
-        {
+{
             "name": "[concat(parameters('factoryName'), '/SynapseToBlobpipeline')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
@@ -367,6 +371,42 @@
                                 }
                             }
                         ]
+                    },
+                    {
+                        "name": "Send file name to applogic",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "SynapseSqlpoolToBlobStorage",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": {
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
+                                "type": "Expression"
+                            },
+                            "connectVia": {
+                                "referenceName": "AutoResolveIntegrationRuntime",
+                                "type": "IntegrationRuntimeReference"
+                            },
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{pipeline().parameters.tableName}\"\n}",
+                                "type": "Expression"
+                            }
+                        }
                     }
                 ],
                 "parameters": {
@@ -387,12 +427,14 @@
                         "defaultValue": "[parameters('datasetName')]"
                     }
                 },
-                "annotations": []
+                "annotations": [],
+                "lastPublishTime": "2021-03-24T10:58:22Z"
             },
             "dependsOn": [
                 "[parameters('factoryName')]",
                 "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                 "[concat(variables('factoryId'), '/datasets/BlobData')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                 "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
             ]
         },
@@ -468,6 +510,99 @@
                 "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                 "[concat(variables('factoryId'), '/datasets/BlobData')]"
             ]
+        },
+         {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2018-07-01-preview",
+            "location": "[parameters('location')]",
+            "name": "msftTeamsConnectionAuth",
+            "properties": {
+                "api": {
+                    "id": "[subscriptionResourceId('Microsoft.Web/locations/managedApis', parameters('location'), 'teams')]"
+                },
+                "displayName": "msftTeamsConnectionAuth"
+            }
+        },
+
+                {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('logicAppName')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "manual": {
+                            "type": "Request",
+                            "kind": "Http",
+                            "inputs": {
+                                "schema": {
+                                    "properties": {
+                                        "DataFactoryName": {
+                                            "type": "string"
+                                        },
+                                        "FileNames": {
+                                            "type": "array"
+                                        },
+                                        "PipelineName": {
+                                            "type": "string"
+                                        },
+                                        "Schema": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "Post_a_message_(V3)": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "body": {
+                                        "content": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>:  @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                        "contentType": "html"
+                                    }
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['teams']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v3/beta/teams/@{encodeURIComponent('0f83d323-c7b7-4f4f-88c4-feebc9fbab23')}/channels/@{encodeURIComponent('19:0ef995481b924089b81e7c1bb21a2ab7@thread.tacv2')}/messages"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "teams": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]",
+                                "connectionName": "teams",
+                                "id": "[subscriptionResourceId('Microsoft.Web/locations/managedApis', parameters('location'), 'teams')]"
+                            }
+                        }
+                    }
+                }
+            }
         },
         {
             "type": "Microsoft.Insights/metricalerts",

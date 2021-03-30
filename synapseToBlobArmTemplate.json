@@ -173,7 +173,7 @@
                 "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
             ]
         },
-        {
+         {
             "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable')]",
             "type": "Microsoft.DataFactory/factories/datasets",
             "apiVersion": "2018-06-01",
@@ -189,6 +189,9 @@
                     "schemaName": {
                         "type": "string"
                     }
+                },
+                "folder": {
+                    "name": "synapse_dataset"
                 },
                 "annotations": [],
                 "type": "AzureSqlDWTable",
@@ -209,7 +212,138 @@
                 "[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalyticsLinkedService')]"
             ]
         },
-{
+        {
+            "name": "[concat(parameters('factoryName'), '/BlobData')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "containerName": {
+                        "type": "string"
+                    },
+                    "datasetName": {
+                        "type": "string"
+                    }
+                },
+                "folder": {
+                    "name": "csv_dataset"
+                },
+                "annotations": [],
+                "type": "DelimitedText",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().datasetName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().containerName",
+                            "type": "Expression"
+                        }
+                    },
+                    "columnDelimiter": ",",
+                    "escapeChar": "\\",
+                    "firstRowAsHeader": true,
+                    "quoteChar": "\""
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/BlobDataParquet')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "containerName": {
+                        "type": "string"
+                    },
+                    "datasetName": {
+                        "type": "string"
+                    }
+                },
+                "folder": {
+                    "name": "parquet_dataset"
+                },
+                "annotations": [],
+                "type": "Parquet",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().datasetName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().containerName",
+                            "type": "Expression"
+                        }
+                    },
+                    "compressionCodec": "snappy"
+                },
+                "schema": []
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/BlobDataJson')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkedService",
+                    "type": "LinkedServiceReference"
+                },
+                "parameters": {
+                    "containerName": {
+                        "type": "string"
+                    },
+                    "datasetName": {
+                        "type": "string"
+                    }
+                },
+                "folder": {
+                    "name": "json_dataset"
+                },
+                "annotations": [],
+                "type": "Json",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "fileName": {
+                            "value": "@dataset().datasetName",
+                            "type": "Expression"
+                        },
+                        "container": {
+                            "value": "@dataset().containerName",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "schema": {}
+            },
+            "dependsOn": [
+                "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+            ]
+        },
+    {
             "name": "[concat(parameters('factoryName'), '/SynapseToBlobpipeline')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
@@ -392,10 +526,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": {
-                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
-                                "type": "Expression"
-                            },
+                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"
@@ -412,20 +543,23 @@
                 "parameters": {
                     "schemaName": {
                         "type": "string",
-                        "defaultValue": "[parameters('schemaName')]"
+                        "defaultValue": "covid"
                     },
                     "tableName": {
                         "type": "string",
-                        "defaultValue": "[parameters('tableName')]"
+                        "defaultValue": "covid_british_columbia"
                     },
                     "containerName": {
                         "type": "string",
-                        "defaultValue": "[parameters('containerName')]"
+                        "defaultValue": "synapsesqlpooldata"
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "[parameters('datasetName')]"
+                        "defaultValue": "covid_british_columbia.csv"
                     }
+                },
+                "folder": {
+                    "name": "SynapseDataExporter/csv"
                 },
                 "annotations": [],
                 "lastPublishTime": "2021-03-24T10:58:22Z"
@@ -439,48 +573,435 @@
             ]
         },
         {
-            "name": "[concat(parameters('factoryName'), '/BlobData')]",
-            "type": "Microsoft.DataFactory/factories/datasets",
+            "name": "[concat(parameters('factoryName'), '/SynapseToBlobpipeline_Json')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
-                "linkedServiceName": {
-                    "referenceName": "AzureBlobStorageLinkedService",
-                    "type": "LinkedServiceReference"
-                },
+                "activities": [
+                    {
+                        "name": "SynapseSqlpoolToBlobStorage",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "SqlDWSource",
+                                "queryTimeout": "02:00:00",
+                                "partitionOption": "None"
+                            },
+                            "sink": {
+                                "type": "JsonSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "JsonWriteSettings"
+                                }
+                            },
+                            "enableStaging": true,
+                            "stagingSettings": {
+                                "linkedServiceName": {
+                                    "referenceName": "AzureBlobStorageLinkedService",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "path": "output"
+                            },
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "mappings": [
+                                    {
+                                        "source": {
+                                            "name": "Date",
+                                            "type": "String"
+                                        },
+                                        "sink": {
+                                            "path": "$['Date']"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Region",
+                                            "type": "String"
+                                        },
+                                        "sink": {
+                                            "path": "$['Region']"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "New_Tests",
+                                            "type": "Int32"
+                                        },
+                                        "sink": {
+                                            "path": "$['New_Tests']"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Total_Tests",
+                                            "type": "Int32"
+                                        },
+                                        "sink": {
+                                            "path": "$['Total_Tests']"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Positivity",
+                                            "type": "Int32"
+                                        },
+                                        "sink": {
+                                            "path": "$['Positivity']"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Turn_Around",
+                                            "type": "Int32"
+                                        },
+                                        "sink": {
+                                            "path": "$['Turn_Around']"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "AzureSynapseAnalyticsTable",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "tableName": {
+                                        "value": "@pipeline().parameters.tableName",
+                                        "type": "Expression"
+                                    },
+                                    "schemaName": {
+                                        "value": "@pipeline().parameters.schemaName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "BlobDataJson",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "containerName": {
+                                        "value": "@pipeline().parameters.containerName",
+                                        "type": "Expression"
+                                    },
+                                    "datasetName": {
+                                        "value": "@pipeline().parameters.datasetName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Send file name to applogic",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "SynapseSqlpoolToBlobStorage",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "connectVia": {
+                                "referenceName": "AutoResolveIntegrationRuntime",
+                                "type": "IntegrationRuntimeReference"
+                            },
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.json')}\"\n}",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
                 "parameters": {
+                    "schemaName": {
+                        "type": "string",
+                        "defaultValue": "covid"
+                    },
+                    "tableName": {
+                        "type": "string",
+                        "defaultValue": "covid_british_columbia"
+                    },
                     "containerName": {
-                        "type": "string"
+                        "type": "string",
+                        "defaultValue": "synapsesqlpooldata"
                     },
                     "datasetName": {
-                        "type": "string"
+                        "type": "string",
+                        "defaultValue": "covid_british_columbia.json"
                     }
                 },
-                "annotations": [],
-                "type": "DelimitedText",
-                "typeProperties": {
-                    "location": {
-                        "type": "AzureBlobStorageLocation",
-                        "fileName": {
-                            "value": "@dataset().datasetName",
-                            "type": "Expression"
-                        },
-                        "container": {
-                            "value": "@dataset().containerName",
-                            "type": "Expression"
-                        }
-                    },
-                    "columnDelimiter": ",",
-                    "escapeChar": "\\",
-                    "firstRowAsHeader": true,
-                    "quoteChar": "\""
+                "folder": {
+                    "name": "SynapseDataExporter/json"
                 },
-                "schema": []
+                "annotations": [],
+                "lastPublishTime": "2021-03-24T10:58:22Z"
             },
             "dependsOn": [
-                "[parameters('factoryName')]",
+                 "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
+                "[concat(variables('factoryId'), '/datasets/BlobDataJson')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                 "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
             ]
         },
+        {
+            "name": "[concat(parameters('factoryName'), '/SynapseToBlobpipeline_Parquet')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "SynapseSqlpoolToBlobStorage",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "SqlDWSource",
+                                "queryTimeout": "02:00:00",
+                                "partitionOption": "None"
+                            },
+                            "sink": {
+                                "type": "DelimitedTextSink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                },
+                                "formatSettings": {
+                                    "type": "DelimitedTextWriteSettings",
+                                    "quoteAllText": true,
+                                    "fileExtension": ".txt"
+                                }
+                            },
+                            "enableStaging": true,
+                            "stagingSettings": {
+                                "linkedServiceName": {
+                                    "referenceName": "AzureBlobStorageLinkedService",
+                                    "type": "LinkedServiceReference"
+                                },
+                                "path": "output"
+                            },
+                            "translator": {
+                                "type": "TabularTranslator",
+                                "mappings": [
+                                    {
+                                        "source": {
+                                            "name": "Date",
+                                            "type": "String",
+                                            "physicalType": "varchar"
+                                        },
+                                        "sink": {
+                                            "name": "Date",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Region",
+                                            "type": "String",
+                                            "physicalType": "varchar"
+                                        },
+                                        "sink": {
+                                            "name": "Region",
+                                            "type": "String",
+                                            "physicalType": "String"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "New_Tests",
+                                            "type": "Int32",
+                                            "physicalType": "int"
+                                        },
+                                        "sink": {
+                                            "name": "New_Tests",
+                                            "type": "Int32",
+                                            "physicalType": "Int32"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Total_Tests",
+                                            "type": "Int32",
+                                            "physicalType": "int"
+                                        },
+                                        "sink": {
+                                            "name": "Total_Tests",
+                                            "type": "Int32",
+                                            "physicalType": "Int32"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Positivity",
+                                            "type": "Decimal",
+                                            "physicalType": "decimal",
+                                            "scale": 0,
+                                            "precision": 18
+                                        },
+                                        "sink": {
+                                            "name": "Positivity",
+                                            "type": "Decimal",
+                                            "physicalType": "Decimal"
+                                        }
+                                    },
+                                    {
+                                        "source": {
+                                            "name": "Turn_Around",
+                                            "type": "Decimal",
+                                            "physicalType": "decimal",
+                                            "scale": 0,
+                                            "precision": 18
+                                        },
+                                        "sink": {
+                                            "name": "Turn_Around",
+                                            "type": "Decimal",
+                                            "physicalType": "Decimal"
+                                        }
+                                    }
+                                ],
+                                "typeConversion": true,
+                                "typeConversionSettings": {
+                                    "allowDataTruncation": true,
+                                    "treatBooleanAsNumber": false
+                                }
+                            }
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "AzureSynapseAnalyticsTable",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "tableName": {
+                                        "value": "@pipeline().parameters.tableName",
+                                        "type": "Expression"
+                                    },
+                                    "schemaName": {
+                                        "value": "@pipeline().parameters.schemaName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "BlobData",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "containerName": {
+                                        "value": "@pipeline().parameters.containerName",
+                                        "type": "Expression"
+                                    },
+                                    "datasetName": {
+                                        "value": "@pipeline().parameters.datasetName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Send file name to applogic",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "SynapseSqlpoolToBlobStorage",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "connectVia": {
+                                "referenceName": "AutoResolveIntegrationRuntime",
+                                "type": "IntegrationRuntimeReference"
+                            },
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.parquet')}\"\n}",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "parameters": {
+                    "schemaName": {
+                        "type": "string",
+                        "defaultValue": "covid"
+                    },
+                    "tableName": {
+                        "type": "string",
+                        "defaultValue": "covid_british_columbia"
+                    },
+                    "containerName": {
+                        "type": "string",
+                        "defaultValue": "synapsesqlpooldata"
+                    },
+                    "datasetName": {
+                        "type": "string",
+                        "defaultValue": "covid_british_columbia.parquet"
+                    }
+                },
+                "folder": {
+                    "name": "SynapseDataExporter/parquet"
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-03-24T10:58:22Z"
+            },
+            "dependsOn": [
+                 "[parameters('factoryName')]",
+                "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
+                "[concat(variables('factoryId'), '/datasets/BlobData')]",
+                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+            ]
+        },
+      
             {
             "type": "microsoft.insights/actionGroups",
             "apiVersion": "2019-03-01",

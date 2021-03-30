@@ -956,7 +956,7 @@
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia.json"
+                        "defaultValue": "covid_british_columbia.jsonl"
                     }
                 },
                 "folder": {

@@ -526,7 +526,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "url": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"
@@ -726,7 +726,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "url": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"
@@ -927,7 +927,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "url": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"
@@ -1157,7 +1157,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": "https://prod-35.eastus.logic.azure.com:443/workflows/e4cd6185248246bfba1e537c741ad927/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=-QkSgAWd8MEHCfpQ_edt-wq32XIcMj68ErpXQr9JxkM",
+                            "url": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"

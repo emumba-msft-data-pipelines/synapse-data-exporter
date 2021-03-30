@@ -523,7 +523,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "url": {
-                                "value": "https://prod-39.eastus.logic.azure.com:443/workflows/16273ca25c5b40c593d956a3c8a9d054/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2fUZgAsJbEvFJkbPtekhWKnUJxsmx2-gpRllnxwYwUk",
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                                 "type": "Expression"
                             },
                             "connectVia": {
@@ -753,7 +753,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "url": {
-                                "value": "https://prod-39.eastus.logic.azure.com:443/workflows/16273ca25c5b40c593d956a3c8a9d054/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2fUZgAsJbEvFJkbPtekhWKnUJxsmx2-gpRllnxwYwUk",
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                                 "type": "Expression"
                             },
                             "connectVia": {
@@ -983,7 +983,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "url": {
-                                "value": "https://prod-39.eastus.logic.azure.com:443/workflows/16273ca25c5b40c593d956a3c8a9d054/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2fUZgAsJbEvFJkbPtekhWKnUJxsmx2-gpRllnxwYwUk",
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                                 "type": "Expression"
                             },
                             "connectVia": {
@@ -1221,7 +1221,7 @@
                         "userProperties": [],
                         "typeProperties": {
                             "url": {
-                                "value": "https://prod-39.eastus.logic.azure.com:443/workflows/16273ca25c5b40c593d956a3c8a9d054/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2fUZgAsJbEvFJkbPtekhWKnUJxsmx2-gpRllnxwYwUk",
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
                                 "type": "Expression"
                             },
                             "connectVia": {

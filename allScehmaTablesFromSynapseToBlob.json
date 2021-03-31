@@ -25,6 +25,7 @@
 
         "storageAccountName": {
             "type": "string",
+            "defaultValue": "storage",
             "metadata": {
             "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
             }

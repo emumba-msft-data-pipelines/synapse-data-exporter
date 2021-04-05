@@ -537,7 +537,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
+                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -546,19 +546,23 @@
                 "parameters": {
                     "schemaName": {
                         "type": "string",
-                        "defaultValue": "covid"
+                        "defaultValue": "[parameters('schemaName')]"
                     },
                     "tableName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia"
+                        "defaultValue": "[parameters('tableName')]"
                     },
                     "containerName": {
                         "type": "string",
-                        "defaultValue": "synapsesqlpooldata"
+                        "defaultValue": "[parameters('containerName')]"
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia.csv"
+                        "defaultValue": "[parameters('datasetName')]"
+                    },
+                    "EmailTo": {
+                        "type": "string",
+                        "defaultValue": ""
                     }
                 },
                 "folder": {
@@ -737,7 +741,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.json')}\"\n}",
+                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -746,19 +750,23 @@
                 "parameters": {
                     "schemaName": {
                         "type": "string",
-                        "defaultValue": "covid"
+                        "defaultValue": "[parameters('schemaName')]"
                     },
                     "tableName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia"
+                        "defaultValue": "[parameters('tableName')]"
                     },
                     "containerName": {
                         "type": "string",
-                        "defaultValue": "synapsesqlpooldata"
+                        "defaultValue": "[parameters('containerName')]"
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia.json"
+                        "defaultValue": "[parameters('datasetName')]"
+                    },
+                    "EmailTo": {
+                        "type": "string",
+                        "defaultValue": ""
                     }
                 },
                 "folder": {
@@ -938,7 +946,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.jsonl')}\"\n}",
+                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -947,19 +955,23 @@
                 "parameters": {
                     "schemaName": {
                         "type": "string",
-                        "defaultValue": "covid"
+                        "defaultValue": "[parameters('schemaName')]"
                     },
                     "tableName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia"
+                        "defaultValue": "[parameters('tableName')]"
                     },
                     "containerName": {
                         "type": "string",
-                        "defaultValue": "synapsesqlpooldata"
+                        "defaultValue": "[parameters('containerName')]"
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia.jsonl"
+                        "defaultValue": "[parameters('datasetName')]"
+                    },
+                    "EmailTo": {
+                        "type": "string",
+                        "defaultValue": ""
                     }
                 },
                 "folder": {
@@ -1168,7 +1180,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.parquet')}\"\n}",
+                                "value": "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -1177,19 +1189,23 @@
                 "parameters": {
                     "schemaName": {
                         "type": "string",
-                        "defaultValue": "covid"
+                        "defaultValue": "[parameters('schemaName')]"
                     },
                     "tableName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia"
+                        "defaultValue": "[parameters('tableName')]"
                     },
                     "containerName": {
                         "type": "string",
-                        "defaultValue": "synapsesqlpooldata"
+                        "defaultValue": "[parameters('containerName')]"
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "covid_british_columbia.parquet"
+                        "defaultValue": "[parameters('datasetName')]"
+                    },
+                    "EmailTo": {
+                        "type": "string",
+                        "defaultValue": ""
                     }
                 },
                 "folder": {
@@ -1250,12 +1266,28 @@
             }
         },
 
-                {
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "gmail",
+            "location": "[parameters('location')]",
+            "kind": "V1",
+            "properties": {
+                "displayName": "gmail",
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                }
+            }
+        },
+
+        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('logicAppName')]",
             "location": "eastus",
             "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', 'gmail')]",
                 "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]"
             ],
             "properties": {
@@ -1279,6 +1311,9 @@
                                         "DataFactoryName": {
                                             "type": "string"
                                         },
+                                        "EmailTo": {
+                                            "type": "string"
+                                        },
                                         "FileNames": {
                                             "type": "array"
                                         },
@@ -1286,6 +1321,9 @@
                                             "type": "string"
                                         },
                                         "Schema": {
+                                            "type": "string"
+                                        },
+                                        "Subject": {
                                             "type": "string"
                                         }
                                     },
@@ -1301,7 +1339,7 @@
                             "inputs": {
                                 "body": {
                                     "body": {
-                                        "content": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>:  @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                        "content": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
                                         "contentType": "html"
                                     }
                                 },
@@ -1313,6 +1351,24 @@
                                 "method": "post",
                                 "path": "/v3/beta/teams/@{encodeURIComponent('0f83d323-c7b7-4f4f-88c4-feebc9fbab23')}/channels/@{encodeURIComponent('19:0ef995481b924089b81e7c1bb21a2ab7@thread.tacv2')}/messages"
                             }
+                        },
+                        "Send_email_(V2)": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": {
+                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                    "Subject": "@triggerBody()?['Subject']",
+                                    "To": "@triggerBody()?['EmailTo']"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['gmail']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/v2/Mail"
+                            }
                         }
                     },
                     "outputs": {}
@@ -1320,6 +1376,11 @@
                 "parameters": {
                     "$connections": {
                         "value": {
+                            "gmail": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', 'gmail')]",
+                                "connectionName": "gmail",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                            },
                             "teams": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]",
                                 "connectionName": "teams",
@@ -1330,6 +1391,7 @@
                 }
             }
         },
+
         {
             "type": "Microsoft.Insights/metricalerts",
             "apiVersion": "2018-03-01",

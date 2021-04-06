@@ -72,7 +72,7 @@
             },
         "datasetName": {
             "type": "string",
-            "defaultValue": "covid_british_columbia.csv"
+            "defaultValue": "covid_british_columbia"
             },
          "emailForAlerts": {
             "type": "String"
@@ -88,7 +88,12 @@
         "actionGroupsName":"actionalerts",
         "factoryId": "[resourceId('Microsoft.DataFactory/factories/', variables('factoryName'))]",
         "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-        "fullyQualifiedDomainName": ".sql.azuresynapse.net"
+        "fullyQualifiedDomainName": ".sql.azuresynapse.net",
+        "datasetCsv":"[concat(parameters('datasetName'), '.csv')]",
+        "datasetJson":"[concat(parameters('datasetName'), '.json')]",
+        "datasetJsonl":"[concat(parameters('datasetName'), '.jsonl')]",
+        "datasetParquet":"[concat(parameters('datasetName'), '.parquet')]"
+
     },
     "resources": [
 
@@ -391,84 +396,6 @@
                             },
                             "translator": {
                                 "type": "TabularTranslator",
-                                "mappings": [
-                                    {
-                                        "source": {
-                                            "name": "Date",
-                                            "type": "String",
-                                            "physicalType": "varchar"
-                                        },
-                                        "sink": {
-                                            "name": "Date",
-                                            "type": "String",
-                                            "physicalType": "String"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Region",
-                                            "type": "String",
-                                            "physicalType": "varchar"
-                                        },
-                                        "sink": {
-                                            "name": "Region",
-                                            "type": "String",
-                                            "physicalType": "String"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "New_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "int"
-                                        },
-                                        "sink": {
-                                            "name": "New_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "Int32"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "int"
-                                        },
-                                        "sink": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "Int32"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Positivity",
-                                            "type": "Decimal",
-                                            "physicalType": "decimal",
-                                            "scale": 0,
-                                            "precision": 18
-                                        },
-                                        "sink": {
-                                            "name": "Positivity",
-                                            "type": "Decimal",
-                                            "physicalType": "Decimal"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Turn_Around",
-                                            "type": "Decimal",
-                                            "physicalType": "decimal",
-                                            "scale": 0,
-                                            "precision": 18
-                                        },
-                                        "sink": {
-                                            "name": "Turn_Around",
-                                            "type": "Decimal",
-                                            "physicalType": "Decimal"
-                                        }
-                                    }
-                                ],
                                 "typeConversion": true,
                                 "typeConversionSettings": {
                                     "allowDataTruncation": true,
@@ -558,7 +485,7 @@
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "[parameters('datasetName')]"
+                        "defaultValue": "[variables('datasetCsv')]"
                     },
                     "EmailTo": {
                         "type": "string",
@@ -621,63 +548,7 @@
                                 "path": "output"
                             },
                             "translator": {
-                                "type": "TabularTranslator",
-                                "mappings": [
-                                    {
-                                        "source": {
-                                            "name": "Date",
-                                            "type": "String"
-                                        },
-                                        "sink": {
-                                            "path": "$['Date']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Region",
-                                            "type": "String"
-                                        },
-                                        "sink": {
-                                            "path": "$['Region']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "New_Tests",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['New_Tests']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Total_Tests']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Positivity",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Positivity']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Turn_Around",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Turn_Around']"
-                                        }
-                                    }
-                                ]
+                                "type": "TabularTranslator"
                             }
                         },
                         "inputs": [
@@ -741,7 +612,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
+                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.json')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -762,7 +633,7 @@
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "[parameters('datasetName')]"
+                        "defaultValue": "[variables('datasetJson')]"
                     },
                     "EmailTo": {
                         "type": "string",
@@ -826,63 +697,7 @@
                                 "path": "output"
                             },
                             "translator": {
-                                "type": "TabularTranslator",
-                                "mappings": [
-                                    {
-                                        "source": {
-                                            "name": "Date",
-                                            "type": "String"
-                                        },
-                                        "sink": {
-                                            "path": "$['Date']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Region",
-                                            "type": "String"
-                                        },
-                                        "sink": {
-                                            "path": "$['Region']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "New_Tests",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['New_Tests']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Total_Tests']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Positivity",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Positivity']"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Turn_Around",
-                                            "type": "Int32"
-                                        },
-                                        "sink": {
-                                            "path": "$['Turn_Around']"
-                                        }
-                                    }
-                                ]
+                                "type": "TabularTranslator"
                             }
                         },
                         "inputs": [
@@ -946,7 +761,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
+                                "value":  "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.jsonl')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -967,7 +782,7 @@
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "[parameters('datasetName')]"
+                        "defaultValue": "[variables('datasetJsonl')]"
                     },
                     "EmailTo": {
                         "type": "string",
@@ -990,7 +805,7 @@
         },
 
         {
-            "name": "[concat(variables('factoryName'), '/SynapseToBlobPipelineParquet')]",
+            "name": "[concat(parameters('factoryName'), '/SynapseToBlobPipelineParquet')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
             "properties": {
@@ -1014,14 +829,12 @@
                                 "partitionOption": "None"
                             },
                             "sink": {
-                                "type": "DelimitedTextSink",
+                                "type": "ParquetSink",
                                 "storeSettings": {
                                     "type": "AzureBlobStorageWriteSettings"
                                 },
                                 "formatSettings": {
-                                    "type": "DelimitedTextWriteSettings",
-                                    "quoteAllText": true,
-                                    "fileExtension": ".txt"
+                                    "type": "ParquetWriteSettings"
                                 }
                             },
                             "enableStaging": true,
@@ -1034,84 +847,6 @@
                             },
                             "translator": {
                                 "type": "TabularTranslator",
-                                "mappings": [
-                                    {
-                                        "source": {
-                                            "name": "Date",
-                                            "type": "String",
-                                            "physicalType": "varchar"
-                                        },
-                                        "sink": {
-                                            "name": "Date",
-                                            "type": "String",
-                                            "physicalType": "String"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Region",
-                                            "type": "String",
-                                            "physicalType": "varchar"
-                                        },
-                                        "sink": {
-                                            "name": "Region",
-                                            "type": "String",
-                                            "physicalType": "String"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "New_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "int"
-                                        },
-                                        "sink": {
-                                            "name": "New_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "Int32"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "int"
-                                        },
-                                        "sink": {
-                                            "name": "Total_Tests",
-                                            "type": "Int32",
-                                            "physicalType": "Int32"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Positivity",
-                                            "type": "Decimal",
-                                            "physicalType": "decimal",
-                                            "scale": 0,
-                                            "precision": 18
-                                        },
-                                        "sink": {
-                                            "name": "Positivity",
-                                            "type": "Decimal",
-                                            "physicalType": "Decimal"
-                                        }
-                                    },
-                                    {
-                                        "source": {
-                                            "name": "Turn_Around",
-                                            "type": "Decimal",
-                                            "physicalType": "decimal",
-                                            "scale": 0,
-                                            "precision": 18
-                                        },
-                                        "sink": {
-                                            "name": "Turn_Around",
-                                            "type": "Decimal",
-                                            "physicalType": "Decimal"
-                                        }
-                                    }
-                                ],
                                 "typeConversion": true,
                                 "typeConversionSettings": {
                                     "allowDataTruncation": true,
@@ -1137,7 +872,7 @@
                         ],
                         "outputs": [
                             {
-                                "referenceName": "BlobData",
+                                "referenceName": "BlobDataParquet",
                                 "type": "DatasetReference",
                                 "parameters": {
                                     "containerName": {
@@ -1172,7 +907,7 @@
                         },
                         "userProperties": [],
                         "typeProperties": {
-                            "url": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
+                            "url": "https://prod-28.eastus.logic.azure.com:443/workflows/c84e022fc6574de1ab3199b325f0f93a/triggers/manual/paths/invoke?api-version=2019-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FZY8pghUIEW7b2HA30y-cCmaD-k9cBt0xb7tU2o94sE",
                             "connectVia": {
                                 "referenceName": "AutoResolveIntegrationRuntime",
                                 "type": "IntegrationRuntimeReference"
@@ -1180,7 +915,7 @@
                             "method": "POST",
                             "headers": {},
                             "body": {
-                                "value": "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.csv')}\"\n}",
+                                "value": "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schema\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{concat(pipeline().parameters.tableName,'.parquet')}\"\n}",
                                 "type": "Expression"
                             }
                         }
@@ -1201,7 +936,7 @@
                     },
                     "datasetName": {
                         "type": "string",
-                        "defaultValue": "[parameters('datasetName')]"
+                        "defaultValue": "[variables('datasetParquet')]"
                     },
                     "EmailTo": {
                         "type": "string",
@@ -1212,12 +947,12 @@
                     "name": "SynapseDataExporter/ExportDataToParquet"
                 },
                 "annotations": [],
-                "lastPublishTime": "2021-03-24T10:58:22Z"
+                "lastPublishTime": "2021-04-06T10:53:12Z"
             },
             "dependsOn": [
                 "[variables('factoryName')]",
                 "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
-                "[concat(variables('factoryId'), '/datasets/BlobData')]",
+                "[concat(variables('factoryId'), '/datasets/BlobDataParquet')]",
                 "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                 "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
             ]

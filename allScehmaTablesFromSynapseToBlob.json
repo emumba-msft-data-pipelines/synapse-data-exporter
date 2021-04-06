@@ -1429,7 +1429,7 @@
                             "type": "ApiConnection",
                             "inputs": {
                                 "body": {
-                                    "Body": "<p>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name: @{triggerBody()?['DataFactoryName']}<br>\nPipeline Name: @{triggerBody()?['PipelineName']}<br>\nSchema Name:  @{triggerBody()?['Schema']}<br>\nFile Names: @{triggerBody()?['FileNames']}</p>",
+                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>File Names</strong>: @{triggerBody()?['FileNames']}</p>",
                                     "Subject": "@triggerBody()?['Subject']",
                                     "To": "@triggerBody()?['EmailTo']"
                                 },

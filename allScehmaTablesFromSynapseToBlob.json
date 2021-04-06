@@ -1341,14 +1341,14 @@
          {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "gmail",
-            "location": "[parameters('location')]",
+            "name": "outlook",
+            "location": "eastus",
             "kind": "V1",
             "properties": {
-                "displayName": "gmail",
+                "displayName": "Outlook.com",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                 }
             }
         },
@@ -1359,7 +1359,7 @@
             "name": "[parameters('logicAppName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', 'gmail')]",
+                "[resourceId('Microsoft.Web/connections', 'outlook')]",
                 "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]"
             ],
             "properties": {
@@ -1429,13 +1429,13 @@
                             "type": "ApiConnection",
                             "inputs": {
                                 "body": {
-                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>File Names</strong>: @{triggerBody()?['FileNames']}</p>",
+                                    "Body": "<p>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name: @{triggerBody()?['DataFactoryName']}<br>\nPipeline Name: @{triggerBody()?['PipelineName']}<br>\nSchema Name:  @{triggerBody()?['Schema']}<br>\nFile Names: @{triggerBody()?['FileNames']}</p>",
                                     "Subject": "@triggerBody()?['Subject']",
                                     "To": "@triggerBody()?['EmailTo']"
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['gmail']['connectionId']"
+                                        "name": "@parameters('$connections')['outlook']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -1448,10 +1448,10 @@
                 "parameters": {
                     "$connections": {
                         "value": {
-                            "gmail": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', 'gmail')]",
-                                "connectionName": "gmail",
-                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                            "outlook": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', 'outlook')]",
+                                "connectionName": "outlook",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                             },
                             "teams": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]",

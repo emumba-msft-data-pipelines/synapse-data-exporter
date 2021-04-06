@@ -1266,17 +1266,17 @@
             }
         },
 
-        {
+         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "gmail",
-            "location": "[parameters('location')]",
+            "name": "outlook",
+            "location": "eastus",
             "kind": "V1",
             "properties": {
-                "displayName": "gmail",
+                "displayName": "Outlook.com",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                 }
             }
         },
@@ -1287,7 +1287,7 @@
             "name": "[parameters('logicAppName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', 'gmail')]",
+                "[resourceId('Microsoft.Web/connections', 'outlook')]",
                 "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]"
             ],
             "properties": {
@@ -1363,7 +1363,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['gmail']['connectionId']"
+                                        "name": "@parameters('$connections')['outlook']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -1376,10 +1376,10 @@
                 "parameters": {
                     "$connections": {
                         "value": {
-                            "gmail": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', 'gmail')]",
-                                "connectionName": "gmail",
-                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                            "outlook": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', 'outlook')]",
+                                "connectionName": "outlook",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                             },
                             "teams": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]",

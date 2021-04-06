@@ -1352,22 +1352,20 @@
             }
         },
 
-        {
+         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "gmail",
+            "name": "outlook",
             "location": "[parameters('location')]",
             "kind": "V1",
             "properties": {
-                "displayName": "gmail",
+                "displayName": "Outlook.com",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                    "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                 }
             }
         },
-
-       
 
         {
             "type": "Microsoft.Logic/workflows",
@@ -1375,7 +1373,7 @@
             "name": "[parameters('logicAppName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', 'gmail')]",
+                "[resourceId('Microsoft.Web/connections', 'outlook')]",
                 "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]"
             ],
             "properties": {
@@ -1440,18 +1438,18 @@
                                 "path": "/v3/beta/teams/@{encodeURIComponent('0f83d323-c7b7-4f4f-88c4-feebc9fbab23')}/channels/@{encodeURIComponent('19:0ef995481b924089b81e7c1bb21a2ab7@thread.tacv2')}/messages"
                             }
                         },
-                        "Send_email_(V2)": {
+                        "Send_an_email_(V2)": {
                             "runAfter": {},
                             "type": "ApiConnection",
                             "inputs": {
                                 "body": {
-                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Names</strong>: @{triggerBody()?['FileNames']}</p>",
+                                    "Body": "<p>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name: @{triggerBody()?['DataFactoryName']}<br>\nPipeline Name: @{triggerBody()?['PipelineName']}<br>\nSchema Name:  @{triggerBody()?['Schema']}<br>\nFile Names: @{triggerBody()?['FileNames']}</p>",
                                     "Subject": "@triggerBody()?['Subject']",
                                     "To": "@triggerBody()?['EmailTo']"
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['gmail']['connectionId']"
+                                        "name": "@parameters('$connections')['outlook']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -1464,13 +1462,13 @@
                 "parameters": {
                     "$connections": {
                         "value": {
-                            "gmail": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', 'gmail')]",
-                                "connectionName": "gmail",
-                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/gmail')]"
+                            "outlook": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', 'outlook')]",
+                                "connectionName": "outlook",
+                                "id": "[concat(subscription().id,'/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/outlook')]"
                             },
                             "teams": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', 'msftTeamsConnectionAuth')]",
+                                "connectionId": "[resourceId('Microsoft.Web/connections','msftTeamsConnectionAuth')]",
                                 "connectionName": "teams",
                                 "id": "[subscriptionResourceId('Microsoft.Web/locations/managedApis', parameters('location'), 'teams')]"
                             }
@@ -1479,7 +1477,6 @@
                 }
             }
         },
-
 
         {
             "type": "Microsoft.Insights/metricalerts",

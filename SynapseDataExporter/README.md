@@ -133,33 +133,33 @@ Once template is deployed you will find the app logic resouorce created, it will
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/scenario1/editapiconnections.jpg)
+![connection-image](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the team account credentials and it will authorize you to your team's account.
 
-![authorize_image](./images/scenario1/authorizeTeams.jpg)
+![authorize-image](./images/scenario1/authorizeTeams.jpg)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
 4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
 
-![designer_image](./images/scenario1/sc1AppLogic.png)
+![designer-image-sc2](./images/scenario1/sc1AppLogic.png)
 
 #### Authenticating Microsoft Outlook account with Azure Logic App
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"outlook"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/scenario1/editapiconnections.jpg)
+![connection-image](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the outlook account credentials and it will authorize you to your outlook's account.
 
-![authorize_image](./images/scenario1/authorizeoutlook.png)
+![authorize-image](./images/scenario1/authorizeoutlook.png)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
 4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
 
-![designer_image](./images/scenario1/sc1AppLogic.png)
+![designer-image-sc2](./images/scenario1/sc1AppLogic.png)
 
 #### Scenario2
 #### Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
@@ -304,27 +304,27 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/editapiconnections.jpg)
+![connection_image_sc2](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the team account credentials and it will authorize you to your team's account.
 
-![authorize_image](./images/authorizeTeams.jpg)
+![authorize_image_sc2](./images/scenario1/authorizeTeams.jpg)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
 4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
 
-![designer_image](./images/sc1AppLogic.png)
+![designer_image_sc2](./images/scenario1/sc1AppLogic.png)
 
 #### Step8: Authenticating Microsoft Outlook account with Azure Logic App
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"outlook"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/editapiconnections.jpg)
+![connection_image_sc2](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the outlook account credentials and it will authorize you to your outlook's account.
 
-![authorize_image](./images/authorizeoutlook.png)
+![authorize_image](./images/scenario1/authorizeoutlook.png)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
@@ -485,33 +485,33 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/editapiconnections.jpg)
+![connection_image](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the team account credentials and it will authorize you to your team's account.
 
-![authorize_image](./images/authorizeTeams.jpg)
+![authorize_image](./images/scenario1/authorizeTeams.jpg)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
 4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
 
-![designer_image](./images/sc1AppLogic.png)
+![designer_image](./images/scenario1/sc1AppLogic.png)
 
 #### Step8: Authenticating Microsoft Outlook account with Azure Logic App
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"outlook"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
-![connection_image](./images/editapiconnections.jpg)
+![connection_image_sc2](./images/scenario1/editapiconnections.jpg)
 
 2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the outlook account credentials and it will authorize you to your outlook's account.
 
-![authorize_image](./images/authorizeoutlook.png)
+![authorize_image_sc2](./images/scenario1/authorizeoutlook.png)
 
 3. Click on **"Save"** to save the authorization information and navigate to resource group.
 
 4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
 
-![designer_image](./images/scenario2/logicAppDesigner.png)
+![designer_image_sc2](./images/scenario2/logicAppDesigner.png)
 
 #### Step9: Logic App contains the logic for sending notifications from azure data factory to ms teams and outlook 
 

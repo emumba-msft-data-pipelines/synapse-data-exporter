@@ -1,8 +1,9 @@
 ## Table Of Contents:
-1. Synapse Data Exporter Scenarios
-	a) Scenario1: Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
-	b) Scenario2: Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
-	c) Scenario3: Copy all data from into azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+1. Synapse Data Exporter Scenarios.
+
+   a. Scenario1: Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+   b. Scenario2: Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+   c. Scenario3: Copy all data from into azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 2. Pipeline workflow explanation for each scenario
 3. Setfup and Configure Notifications for MS Teams and Outlook for each scenario
  

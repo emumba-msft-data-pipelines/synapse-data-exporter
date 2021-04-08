@@ -1,6 +1,8 @@
 ## Table Of Contents:
 1. Synapse Data Exporter Scenarios
-2. Setfup and Configure Notifications for MS Teams and Outlook
+2. Pipeline workflow explanation for each scenario
+2. Setfup and Configure Notifications for MS Teams and Outlook for each scenario
+3. 
 
 
 

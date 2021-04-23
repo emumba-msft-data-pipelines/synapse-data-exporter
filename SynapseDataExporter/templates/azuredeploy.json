@@ -93,6 +93,7 @@
             "defaultValue": "TeamsNotify",
             "type": "String"
         },
+
         "keyVaultName": {
             "type": "string",
             "defaultValue": "demokv",
@@ -158,9 +159,11 @@
                     "location": {
                         "value": "[parameters('location')]"
                     },
+
                     "keyVaultName": {
                         "value": "[variables('keyVaultName')]"
                     },
+
                     "synapseAnalyticsLoginPassword": {
                         "value": "[parameters('synapseAnalyticsLoginPassword')]"
                     },

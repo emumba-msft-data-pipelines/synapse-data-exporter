@@ -4,8 +4,11 @@
     "parameters": {
         "factoryName": {
             "type": "string",
-            "metadata": "Data Factory name",
-            "defaultValue": "synapsetoblobadf"
+            "defaultValue": "synapsetoblobadf",
+            "metadata": {
+                "description":"Data Factory name"
+            }
+            
         },
         "location": {
             "type": "string",
@@ -40,7 +43,7 @@
         },
         "synapseWorkSpaceName": {
             "type": "string",
-            "defaultValue": "testsynapsews",
+            "defaultValue": "testsynapse-ws",
             "metadata": {
                 "description": "Server name must be at least 1 characters and at most 50 characters. Server name must only contain lowercase letters, numbers, and hyphens. The server name must not start or end in a hyphen."
             } 
@@ -92,8 +95,9 @@
         },
         "keyVaultName": {
             "type": "string",
+            "defaultValue": "demokv",
             "metadata": {
-            "description": "Specifies the name of the key vault."
+                "description": "Specifies the name of the key vault."
             }
       },
       "azureUserObjectId": {

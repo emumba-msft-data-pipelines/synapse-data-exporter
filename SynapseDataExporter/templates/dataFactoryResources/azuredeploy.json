@@ -172,34 +172,35 @@
                     },
 
                     {
-                        "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
-                        "type": "Microsoft.DataFactory/factories/linkedServices",
-                        "apiVersion": "2018-06-01",
-                        "properties": {
-                            "annotations": [],
-                            "type": "AzureSqlDW",
-                            "typeProperties": {
-                                "connectionString": "[concat('Server=tcp:',parameters('synapseWorkSpaceName'), variables('fullyQualifiedDomainName'), ',1433;Initial Catalog=', parameters('sqlDBPoolName'), ';User Id=', parameters('administratorLogin'), '@', parameters('synapseWorkSpaceName'), ';Trusted_Connection=False;Encrypt=True;Connection Timeout=30;MultipleActiveResultSets=True')]"
+                            "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
+                            "type": "Microsoft.DataFactory/factories/linkedServices",
+                            "apiVersion": "2018-06-01",
+                            "properties": {
+                                "annotations": [],
+                                "type": "AzureSqlDW",
+                                "typeProperties": {
+                                    "connectionString": "[concat('Server=tcp:',parameters('synapseWorkSpaceName'), variables('fullyQualifiedDomainName'),',1433;Initial Catalog=', parameters('sqlDBPoolName'),';User Id=', parameters('administratorLogin'), '@', parameters('synapseWorkSpaceName'), ';Trusted_Connection=False;Encrypt=True;Connection Timeout=30;MultipleActiveResultSets=True')]",
+                                    "password": {
+                                        "type": "AzureKeyVaultSecret",
+                                        "store": {
+                                            "referenceName": "SynapseDataExporterLinkedService",
+                                            "type": "LinkedServiceReference"
+                                        },
+                                        "secretName": "synapseAnalyticsLoginPassword"
+                                    }
+                                },
+                                "connectVia": {
+                                    "referenceName": "AutoResolveIntegrationRuntime",
+                                    "type": "IntegrationRuntimeReference"
+                                }
                             },
-                            "password": {
-                            "type": "AzureKeyVaultSecret",
-                            "store": {
-                                "referenceName": "SynapseDataExporterLinkedService",
-                                "type": "LinkedServiceReference"
-                            },
-                            "secretName": "synapseAnalyticsLoginPassword"
-                        },
-                            "connectVia": {
-                                "referenceName": "AutoResolveIntegrationRuntime",
-                                "type": "IntegrationRuntimeReference"
-                            }
-                        },
-                        "dependsOn": [
-                            "[parameters('factoryName')]",
-                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
-                            "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
-                        ]
-                    },
+                            "dependsOn": [
+                                "[parameters('factoryName')]",
+                                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                                "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
+                            ]
+                     },
+
                     {
                         "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable')]",
                         "type": "Microsoft.DataFactory/factories/datasets",

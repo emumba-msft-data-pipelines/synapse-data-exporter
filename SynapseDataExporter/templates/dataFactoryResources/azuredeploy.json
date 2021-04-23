@@ -80,7 +80,6 @@
           }
     },
     "variables": {
-        "factoryName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
         "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
         "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
         "fullyQualifiedDomainName": ".sql.azuresynapse.net",
@@ -96,7 +95,7 @@
         {
             "type": "Microsoft.DataFactory/factories",
             "apiVersion": "2018-06-01",
-            "name": "[variables('factoryName')]",
+            "name": "[parameters('factoryName')]",
             "location": "[parameters('location')]",
             "properties": {},
             "identity": {
@@ -107,7 +106,7 @@
         
   
                     {
-                        "name": "[concat(variables('factoryName'), '/AutoResolveIntegrationRuntime')]",
+                        "name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
                         "type": "Microsoft.DataFactory/factories/integrationRuntimes",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -124,7 +123,7 @@
                             }
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]"
+                            "[parameters('factoryName')]"
                         ]
                     },
                     {
@@ -144,7 +143,7 @@
                     ]
                 },
                     {
-                        "name": "[concat(variables('factoryName'), '/AzureBlobStorageLinkedService')]",
+                        "name": "[concat(parameters('factoryName'), '/AzureBlobStorageLinkedService')]",
                         "type": "Microsoft.DataFactory/factories/linkedServices",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -166,13 +165,13 @@
                             }
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
                         ]
                     },
 
                     {
-                        "name": "[concat(variables('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
+                        "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
                         "type": "Microsoft.DataFactory/factories/linkedServices",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -195,12 +194,12 @@
                             }
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/AzureSynapseAnalyticsTable')]",
+                        "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable')]",
                         "type": "Microsoft.DataFactory/factories/datasets",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -234,12 +233,12 @@
                             }
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalyticsLinkedService')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/BlobData')]",
+                        "name": "[concat(parameters('factoryName'), '/BlobData')]",
                         "type": "Microsoft.DataFactory/factories/datasets",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -280,12 +279,12 @@
                             "schema": []
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/BlobDataParquet')]",
+                        "name": "[concat(parameters('factoryName'), '/BlobDataParquet')]",
                         "type": "Microsoft.DataFactory/factories/datasets",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -323,12 +322,12 @@
                             "schema": []
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/BlobDataJson')]",
+                        "name": "[concat(parameters('factoryName'), '/BlobDataJson')]",
                         "type": "Microsoft.DataFactory/factories/datasets",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -365,12 +364,12 @@
                             "schema": {}
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
                         ]
                     },
                 {
-                        "name": "[concat(variables('factoryName'), '/SynapseToBlobPipelineCsv')]",
+                        "name": "[concat(parameters('factoryName'), '/SynapseToBlobPipelineCsv')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -517,7 +516,7 @@
                             "lastPublishTime": "2021-03-24T10:58:22Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/datasets/BlobData')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
@@ -525,7 +524,7 @@
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/SynapseToBlobPipelineJson')]",
+                        "name": "[concat(parameters('factoryName'), '/SynapseToBlobPipelineJson')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -665,7 +664,7 @@
                             "lastPublishTime": "2021-03-24T10:58:22Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
@@ -674,7 +673,7 @@
                     },
 
                     {
-                        "name": "[concat(variables('factoryName'), '/SynapseToBlobPipelineJsonl')]",
+                        "name": "[concat(parameters('factoryName'), '/SynapseToBlobPipelineJsonl')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -814,7 +813,7 @@
                             "lastPublishTime": "2021-03-30T10:17:31Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
@@ -823,7 +822,7 @@
                     },
 
                     {
-                        "name": "[concat(variables('factoryName'), '/SynapseToBlobPipelineParquet')]",
+                        "name": "[concat(parameters('factoryName'), '/SynapseToBlobPipelineParquet')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -968,7 +967,7 @@
                             "lastPublishTime": "2021-04-06T10:53:12Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataParquet')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
@@ -978,7 +977,7 @@
 
 
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesFromSynapseToBlobCsv')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesFromSynapseToBlobCsv')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -1215,14 +1214,14 @@
                             "lastPublishTime": "2021-03-25T09:02:26Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobData')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesFromSynapseToBlobJson')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesFromSynapseToBlobJson')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -1449,14 +1448,14 @@
                             "lastPublishTime": "2021-03-25T09:02:26Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]"
                         ]
                     },
                             {
-                        "name": "[concat(variables('factoryName'), '/AllTablesFromSynapseToBlobJsonl')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesFromSynapseToBlobJsonl')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -1683,14 +1682,14 @@
                             "lastPublishTime": "2021-03-30T05:32:37Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesFromSynapseToBlobParquet')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesFromSynapseToBlobParquet')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -1925,7 +1924,7 @@
                             "lastPublishTime": "2021-03-25T09:02:26Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataParquet')]"
@@ -1933,7 +1932,7 @@
                     },
 
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobCsv')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobCsv')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -2169,14 +2168,14 @@
                             "lastPublishTime": "2021-03-24T12:31:35Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobData')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobJson')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobJson')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -2402,14 +2401,14 @@
                             "lastPublishTime": "2021-03-24T12:31:35Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]"
                         ]
                     },
                         {
-                        "name": "[concat(variables('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobJsonl')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobJsonl')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -2635,14 +2634,14 @@
                             "lastPublishTime": "2021-03-26T11:57:07Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataJson')]"
                         ]
                     },
                     {
-                        "name": "[concat(variables('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobParquet')]",
+                        "name": "[concat(parameters('factoryName'), '/AllTablesOfAllScehmasFromSynapseToBlobParquet')]",
                         "type": "Microsoft.DataFactory/factories/pipelines",
                         "apiVersion": "2018-06-01",
                         "properties": {
@@ -2876,7 +2875,7 @@
                             "lastPublishTime": "2021-03-24T12:31:35Z"
                         },
                         "dependsOn": [
-                            "[variables('factoryName')]",
+                            "[parameters('factoryName')]",
                             "[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable')]",
                             "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
                             "[concat(variables('factoryId'), '/datasets/BlobDataParquet')]"

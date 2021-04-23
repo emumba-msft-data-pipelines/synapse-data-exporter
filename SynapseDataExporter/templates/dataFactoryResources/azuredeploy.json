@@ -166,7 +166,8 @@
                         },
                         "dependsOn": [
                             "[parameters('factoryName')]",
-                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                            "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
                         ]
                     },
 
@@ -195,7 +196,8 @@
                         },
                         "dependsOn": [
                             "[parameters('factoryName')]",
-                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                            "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
                         ]
                     },
                     {

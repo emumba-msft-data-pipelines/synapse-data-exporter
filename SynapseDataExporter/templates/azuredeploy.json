@@ -111,7 +111,7 @@
     "variables": {
         "factoryName": "[concat(parameters('factoryName'), uniquestring(resourceGroup().id))]",
         "storageAccountName": "[concat(parameters('storageAccountName'), uniquestring(resourceGroup().id))]",
-        "keyVaultName": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
+        "keyVaultNameUnique": "[concat(parameters('keyVaultName'), uniquestring(resourceGroup().id))]",
         "storageTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/storageAccount/azuredeploy.json",
         "keyVaultTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/keyVault/azuredeploy.json",
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/keyVaultPermissionsUpdate/azuredeploy.json",
@@ -161,7 +161,7 @@
                     },
 
                     "keyVaultName": {
-                        "value": "[variables('keyVaultName')]"
+                        "value": "[variables('keyVaultNameUnique')]"
                     },
 
                     "synapseAnalyticsLoginPassword": {
@@ -190,7 +190,7 @@
                         "value": "[parameters('location')]"
                     },
                     "keyVaultName": {
-                        "value": "[variables('keyVaultName')]"
+                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "factoryName": {
                         "value": "[variables('factoryName')]"
@@ -274,7 +274,7 @@
                         "value": "[parameters('logicAppName')]"
                     },
                     "keyVaultName": {
-                        "value": "[variables('keyVaultName')]"
+                        "value": "[variables('keyVaultNameUnique')]"
                     }
                 }
             }

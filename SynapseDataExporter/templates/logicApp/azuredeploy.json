@@ -41,7 +41,8 @@
                 }
             }
         },
-             {
+
+        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('logicAppName')]",
@@ -77,11 +78,14 @@
                                         "FileNames": {
                                             "type": "array"
                                         },
+                                        "From": {
+                                            "type": "string"
+                                        },
                                         "PipelineName": {
                                             "type": "string"
                                         },
-                                        "Schema": {
-                                            "type": "string"
+                                        "Schemas": {
+                                            "type": "array"
                                         },
                                         "Subject": {
                                             "type": "string"
@@ -99,13 +103,13 @@
                             "inputs": {
                                 "body": {
                                     "body": {
-                                        "content": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                        "content": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n<br>\nData Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schemas</strong>: @{triggerBody()?['Schemas']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
                                         "contentType": "html"
                                     }
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['teams']['connectionId']"
+                                        "name": "@parameters('$connections')['teams_1']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -117,7 +121,8 @@
                             "type": "ApiConnection",
                             "inputs": {
                                 "body": {
-                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schema</strong>: @{triggerBody()?['Schema']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                    "Body": "<p><strong>Below is the information of files copied from synapse to blob storage<br>\n</strong><br>\n<strong>Data Factory Name</strong>: @{triggerBody()?['DataFactoryName']}<br>\n<strong>Pipeline Name</strong>: @{triggerBody()?['PipelineName']}<br>\n<strong>Schemas</strong>: @{triggerBody()?['Schemas']}<br>\n<strong>File Name</strong>: @{triggerBody()?['FileNames']}</p>",
+                                    "ReplyTo": "@triggerBody()?['From']",
                                     "Subject": "@triggerBody()?['Subject']",
                                     "To": "@triggerBody()?['EmailTo']"
                                 },

@@ -131,7 +131,8 @@
         "keyVaultPermissionsUpdateTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/keyVaultPermissionsUpdate/azuredeploy.json",
         "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/dataFactory/azuredeploy.json",
         "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/logicApp/azuredeploy.json",
-        "dataFactoryTemplate": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/dataFactoryResources/azuredeploy.json"        
+        "dataFactoryTemplate": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/dataFactoryResources/azuredeploy.json",
+        "pipelineTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/pipeline/azuredeploy.json" 
     },
     "resources": [
         {
@@ -302,7 +303,66 @@
             }
         },
         
-        
+        {
+
+            "name": "pipelineTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('pipelineTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
         
         {
             "name": "emptyDataFactory",

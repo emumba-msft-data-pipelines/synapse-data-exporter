@@ -292,10 +292,10 @@
                     "keyVaultName": {
                         "value": "[variables('keyVaultNameUnique')]"
                     },
-                     "EmailTo": {
+                    "EmailTo": {
                         "value": "[parameters('EmailTo')]"
                     },
-                     "EmailFrom": {
+                    "EmailFrom": {
                         "value": "[parameters('EmailFrom')]"
                     }
                 }

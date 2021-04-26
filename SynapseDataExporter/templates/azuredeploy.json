@@ -89,6 +89,20 @@
                 "description": "Enter the dataset name which will be the name of data stored in blob storage container?"
             }
         },
+         "EmailTo": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Enter the email address for sending alerts "
+            }
+        },
+        "EmailFrom": {
+            "type": "string",
+            "defaultValue": "adfalerts@hotmail.com",
+            "metadata": {
+                "description": "Enter the email address from you want to send alerts "
+            }
+        },
         "logicAppName": {
             "defaultValue": "TeamsNotify",
             "type": "String"
@@ -277,7 +291,13 @@
                     },
                     "keyVaultName": {
                         "value": "[variables('keyVaultNameUnique')]"
-                    }
+                    },
+                     "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                     "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    },
                 }
             }
         },

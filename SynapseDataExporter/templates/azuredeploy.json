@@ -297,7 +297,7 @@
                     },
                      "EmailFrom": {
                         "value": "[parameters('EmailFrom')]"
-                    },
+                    }
                 }
             }
         },

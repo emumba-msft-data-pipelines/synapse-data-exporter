@@ -53,13 +53,7 @@
         "logicAppName": {
             "defaultValue": "TeamsNotify",
             "type": "String"
-        },
-        "keyVaultName": {
-            "type": "string",
-            "metadata": {
-              "description": "Specifies the name of the key vault."
-            }
-          }
+        }
     },
     "variables": {
     },

@@ -109,7 +109,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['teams_1']['connectionId']"
+                                        "name": "@parameters('$connections')['teams']['connectionId']"
                                     }
                                 },
                                 "method": "post",

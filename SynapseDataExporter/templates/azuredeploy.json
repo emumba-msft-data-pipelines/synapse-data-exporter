@@ -132,7 +132,19 @@
         "emptyDataFactoryTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/dataFactory/azuredeploy.json",
         "logicAppTemplateUri": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/logicApp/azuredeploy.json",
         "dataFactoryTemplate": "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/dataFactoryResources/azuredeploy.json",
-        "pipelineTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/pipeline/azuredeploy.json" 
+        "SynapseToBlobPipelineCsvTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/SynapseToBlobPipelineCsv/azuredeploy.json" ,
+        "SynapseToBlobPipelineJsonTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/SynapseToBlobPipelineJson/azuredeploy.json" ,
+        "SynapseToBlobPipelineJsonlTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/SynapseToBlobPipelineJsonl/azuredeploy.json" ,
+        "SynapseToBlobPipelineParquetTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/SynapseToBlobPipelineParquet/azuredeploy.json" ,
+        "AllTablesFromSynapseToBlobCsvTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesFromSynapseToBlobCsv/azuredeploy.json" ,
+        "AllTablesFromSynapseToBlobJsonTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesFromSynapseToBlobJson/azuredeploy.json" ,
+        "AllTablesFromSynapseToBlobJsonlTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesFromSynapseToBlobJsonl/azuredeploy.json" ,
+        "AllTablesFromSynapseToBlobParquetTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesFromSynapseToBlobParquet/azuredeploy.json" ,
+        "AllTablesOfAllScehmasFromSynapseToBlobCsvTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesOfAllScehmasFromSynapseToBlobCsv/azuredeploy.json" ,
+        "AllTablesOfAllScehmasFromSynapseToBlobJsonTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesOfAllScehmasFromSynapseToBlobJson/azuredeploy.json" ,
+        "AllTablesOfAllScehmasFromSynapseToBlobJsonlTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesOfAllScehmasFromSynapseToBlobJsonl/azuredeploy.json" ,
+        "AllTablesOfAllScehmasFromSynapseToBlobParquetTemplate":     "https://raw.githubusercontent.com/emumba-msft-data-pipelines/synapse-data-exporter/integrate-scenarios/SynapseDataExporter/templates/AllTablesOfAllScehmasFromSynapseToBlobParquet/azuredeploy.json" 
+
     },
     "resources": [
         {
@@ -305,7 +317,7 @@
         
         {
 
-            "name": "pipelineTemplate",
+            "name": "SynapseToBlobPipelineCsvTemplate",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "dependsOn": [
@@ -315,7 +327,678 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('pipelineTemplate')]"
+                    "uri": "[variables('SynapseToBlobPipelineCsvTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "SynapseToBlobPipelineJsonTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('SynapseToBlobPipelineJsonTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "SynapseToBlobPipelineJsonlTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('SynapseToBlobPipelineJsonlTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "SynapseToBlobPipelineParquetTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('SynapseToBlobPipelineParquetTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesFromSynapseToBlobCsvTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesFromSynapseToBlobCsvTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesFromSynapseToBlobJsonTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesFromSynapseToBlobJsonTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesFromSynapseToBlobJsonlTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesFromSynapseToBlobJsonlTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesFromSynapseToBlobParquetTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesFromSynapseToBlobParquetTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesOfAllScehmasFromSynapseToBlobCsvTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesOfAllScehmasFromSynapseToBlobCsvTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesOfAllScehmasFromSynapseToBlobJsonTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesOfAllScehmasFromSynapseToBlobJsonTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesOfAllScehmasFromSynapseToBlobJsonlTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesOfAllScehmasFromSynapseToBlobJsonlTemplate')]"
+                },
+                "parameters": {
+                    "factoryName": {
+                        "value": "[variables('factoryName')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[variables('storageAccountName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlDBPoolName": {
+                        "value": "[parameters('sqlDBPoolName')]"
+                    },
+                    "synapseWorkSpaceName": {
+                        "value": "[parameters('synapseWorkSpaceName')]"
+                    },
+                    "administratorLogin":{
+                        "value": "[parameters('administratorLogin')]"
+                    },
+                    "schemaName": {
+                        "value": "[parameters('schemaName')]"
+                    },
+                    "tableName": {
+                        "value": "[parameters('tableName')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    },
+                    "datasetName": {
+                        "value": "[parameters('datasetName')]"
+                    },
+                    "logicAppName": {
+                        "value": "[parameters('logicAppName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[variables('keyVaultNameUnique')]"
+                    },
+                    "EmailTo": {
+                        "value": "[parameters('EmailTo')]"
+                    },
+                    "EmailFrom": {
+                        "value": "[parameters('EmailFrom')]"
+                    }
+                }
+            }
+        },
+
+        {
+
+            "name": "AllTablesOfAllScehmasFromSynapseToBlobParquetTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','dataFactoryTemplate')]"
+
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('AllTablesOfAllScehmasFromSynapseToBlobParquetTemplate')]"
                 },
                 "parameters": {
                     "factoryName": {

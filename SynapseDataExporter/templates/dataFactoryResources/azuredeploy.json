@@ -9,15 +9,6 @@
             "type": "string",
             "defaultValue": "eastus"
          },
-
-
-        "storageAccountName": {
-            "type": "string",
-            "defaultValue":"storage",
-            "metadata": {
-                "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
-            }
-        },
         
         "sqlDBPoolName": {
             "type": "string",
@@ -69,25 +60,6 @@
             }
         },
 
-        "EmailTo": {
-            "type": "string",
-            "defaultValue": "",
-            "metadata": {
-                "description": "Enter the email address for sending alerts "
-            }
-        },
-        "EmailFrom": {
-            "type": "string",
-            "defaultValue": "adfalerts@hotmail.com",
-            "metadata": {
-                "description": "Enter the email address from you want to send alerts "
-            }
-        },
-
-        "logicAppName": {
-            "defaultValue": "TeamsNotify",
-            "type": "String"
-        },
         "keyVaultName": {
             "type": "string",
             "metadata": {
@@ -97,13 +69,7 @@
     },
     "variables": {
         "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
-        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
-        "fullyQualifiedDomainName": ".sql.azuresynapse.net",
-        "keyVaultbaseUrl":"[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]",
-        "datasetCsv":"[concat(parameters('datasetName'), '.csv')]",
-        "datasetJson":"[concat(parameters('datasetName'), '.json')]",
-        "datasetJsonl":"[concat(parameters('datasetName'), '.jsonl')]",
-        "datasetParquet":"[concat(parameters('datasetName'), '.parquet')]"
+        "fullyQualifiedDomainName": ".sql.azuresynapse.net"
 
     },
     "resources": [

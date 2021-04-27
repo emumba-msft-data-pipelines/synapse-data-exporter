@@ -272,9 +272,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
                     "location": {
                         "value": "[parameters('location')]"
                     },
@@ -299,17 +296,8 @@
                     "datasetName": {
                         "value": "[parameters('datasetName')]"
                     },
-                    "logicAppName": {
-                        "value": "[parameters('logicAppName')]"
-                    },
                     "keyVaultName": {
                         "value": "[variables('keyVaultNameUnique')]"
-                    },
-                    "EmailTo": {
-                        "value": "[parameters('EmailTo')]"
-                    },
-                    "EmailFrom": {
-                        "value": "[parameters('EmailFrom')]"
                     }
                 }
             }
@@ -333,21 +321,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -362,9 +335,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -394,21 +364,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -423,9 +378,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -455,21 +407,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -484,9 +421,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -516,21 +450,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -545,9 +464,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -577,21 +493,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -606,9 +507,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -638,21 +536,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -667,9 +550,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -699,21 +579,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -728,9 +593,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -760,21 +622,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -789,9 +636,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -821,21 +665,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -850,9 +679,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -882,21 +708,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -911,9 +722,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -943,21 +751,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -972,9 +765,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"
@@ -1004,21 +794,6 @@
                     "factoryName": {
                         "value": "[variables('factoryName')]"
                     },
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    },
-                    "location": {
-                        "value": "[parameters('location')]"
-                    },
-                    "sqlDBPoolName": {
-                        "value": "[parameters('sqlDBPoolName')]"
-                    },
-                    "synapseWorkSpaceName": {
-                        "value": "[parameters('synapseWorkSpaceName')]"
-                    },
-                    "administratorLogin":{
-                        "value": "[parameters('administratorLogin')]"
-                    },
                     "schemaName": {
                         "value": "[parameters('schemaName')]"
                     },
@@ -1033,9 +808,6 @@
                     },
                     "logicAppName": {
                         "value": "[parameters('logicAppName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[variables('keyVaultNameUnique')]"
                     },
                     "EmailTo": {
                         "value": "[parameters('EmailTo')]"

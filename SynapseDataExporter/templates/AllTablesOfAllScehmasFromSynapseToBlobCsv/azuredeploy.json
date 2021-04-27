@@ -5,41 +5,7 @@
         "factoryName": {
             "type": "string"
         },
-        "location": {
-            "type": "string",
-            "defaultValue": "eastus"
-         },
 
-
-        "storageAccountName": {
-            "type": "string",
-            "defaultValue":"storage",
-            "metadata": {
-                "description": "The storage account name can contain only lowercase letters and numbers. Name must be between 1 and 11 characters"
-            }
-        },
-        
-        "sqlDBPoolName": {
-            "type": "string",
-            "defaultValue": "synapsesqlpool",
-            "metadata": {
-                "description": "Database name should not match special patterns,The value has a length of at most 115. Database name should not contain reserved words.No database with the same name exists in the server"
-            }
-        },
-        "synapseWorkSpaceName": {
-            "type": "string",
-            "defaultValue": "testsynapsews",
-            "metadata": {
-                "description": "Server name must be at least 1 characters and at most 50 characters. Server name must only contain lowercase letters, numbers, and hyphens. The server name must not start or end in a hyphen."
-            } 
-        },
-
-       "administratorLogin": {
-             "type": "string",
-             "metadata": {
-                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.). "
-             }
-        },
         "schemaName": {
             "type": "string",
             "defaultValue": "covid",
@@ -87,23 +53,9 @@
         "logicAppName": {
             "defaultValue": "TeamsNotify",
             "type": "String"
-        },
-        "keyVaultName": {
-            "type": "string",
-            "metadata": {
-              "description": "Specifies the name of the key vault."
-            }
-          }
+        }
     },
     "variables": {
-        "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
-        "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
-        "fullyQualifiedDomainName": ".sql.azuresynapse.net",
-        "keyVaultbaseUrl":"[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]",
-        "datasetCsv":"[concat(parameters('datasetName'), '.csv')]",
-        "datasetJson":"[concat(parameters('datasetName'), '.json')]",
-        "datasetJsonl":"[concat(parameters('datasetName'), '.jsonl')]",
-        "datasetParquet":"[concat(parameters('datasetName'), '.parquet')]"
 
     },
     "resources": [

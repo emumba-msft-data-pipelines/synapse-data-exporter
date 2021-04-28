@@ -1,0 +1,300 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string"
+        },
+
+        "schemaName": {
+            "type": "string",
+            "defaultValue": "covid",
+            "metadata": {
+                "description": "Enter the name of schema to extract data"
+            }
+        },
+        "tableName": {
+            "type": "string",
+            "defaultValue": "covid_british_columbia",
+            "metadata": {
+                "description": "Enter the name of table to extract data"
+            }
+         },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "synapsesqlpooldata",
+            "metadata": {
+                "description": "Enter the name of blob storage container to store the data"
+            }
+        },
+        "datasetName": {
+            "type": "string",
+            "defaultValue": "covid_british_columbia",
+            "metadata": {
+                "description": "Enter the dataset name which will be the name of data stored in blob storage container?"
+            }
+        },
+
+        "EmailTo": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Enter the email address for sending alerts "
+            }
+        },
+        "EmailFrom": {
+            "type": "string",
+            "defaultValue": "adfalerts@hotmail.com",
+            "metadata": {
+                "description": "Enter the email address from you want to send alerts "
+            }
+        },
+
+        "logicAppName": {
+            "defaultValue": "TeamsNotify",
+            "type": "String"
+        }
+    },
+    "variables": {
+    },
+    "resources": [
+
+         {
+            "name": "[concat(parameters('factoryName'), '/AllTablesFromSynapseToBlobJsonl')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "get-tables",
+                        "type": "Lookup",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "SqlDWSource",
+                                "sqlReaderQuery": {
+                                    "value": "select * from synapsesqlpool.INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE' AND TABLE_SCHEMA='@{pipeline().parameters.schemaName}'",
+                                    "type": "Expression"
+                                },
+                                "queryTimeout": "02:00:00",
+                                "partitionOption": "None"
+                            },
+                            "dataset": {
+                                "referenceName": "AzureSynapseAnalyticsTable",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "tableName": "value from query",
+                                    "schemaName": "value from quwry"
+                                }
+                            },
+                            "firstRowOnly": false
+                        }
+                    },
+                    {
+                        "name": "copy-each-table",
+                        "type": "ForEach",
+                        "dependsOn": [
+                            {
+                                "activity": "get-tables",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "items": {
+                                "value": "@activity('get-tables').output.value",
+                                "type": "Expression"
+                            },
+                            "activities": [
+                                {
+                                    "name": "Copy data from syanapse to blob storage",
+                                    "type": "Copy",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "7.00:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "source": {
+                                            "type": "SqlDWSource",
+                                            "queryTimeout": "02:00:00",
+                                            "partitionOption": "None"
+                                        },
+                                        "sink": {
+                                            "type": "JsonSink",
+                                            "storeSettings": {
+                                                "type": "AzureBlobStorageWriteSettings"
+                                            },
+                                            "formatSettings": {
+                                                "type": "JsonWriteSettings"
+                                            }
+                                        },
+                                        "enableStaging": false
+                                    },
+                                    "inputs": [
+                                        {
+                                            "referenceName": "AzureSynapseAnalyticsTable",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "tableName": {
+                                                    "value": "@item().Table_Name",
+                                                    "type": "Expression"
+                                                },
+                                                "schemaName": {
+                                                    "value": "@item().table_schema",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "outputs": [
+                                        {
+                                            "referenceName": "BlobDataJson",
+                                            "type": "DatasetReference",
+                                            "parameters": {
+                                                "containerName": {
+                                                    "value": "@pipeline().parameters.containerName",
+                                                    "type": "Expression"
+                                                },
+                                                "datasetName": {
+                                                    "value": "@concat(item().table_schema,'_',item().table_name,'.jsonl')",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "AppendFileNameVariable",
+                                    "type": "AppendVariable",
+                                    "dependsOn": [
+                                        {
+                                            "activity": "Copy data from syanapse to blob storage",
+                                            "dependencyConditions": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    ],
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "variableName": "fileNamesCopy",
+                                        "value": {
+                                            "value": "@concat(item().table_schema,'_',item().table_name,'.jsonl')",
+                                            "type": "Expression"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "Send files list to app logic",
+                        "type": "WebActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "Set Files list",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "url": {
+                                "value": "[listCallbackURL(resourceId('Microsoft.Logic/workflows/triggers', parameters('logicAppName'), 'manual'), '2019-05-01').value]",
+                                "type": "Expression"
+                            },
+                            "connectVia": {
+                                "referenceName": "AutoResolveIntegrationRuntime",
+                                "type": "IntegrationRuntimeReference"
+                            },
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "value": "{\n   \"Subject\": \"Data Copied Successfully Alert !\",\n   \"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n   \"From\":\"@{pipeline().parameters.From}\",\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Schemas\": \"@{pipeline().parameters.schemaName}\",\n   \"FileNames\": \"@{variables('fileName')}\"\n}",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Set Files list",
+                        "type": "SetVariable",
+                        "dependsOn": [
+                            {
+                                "activity": "copy-each-table",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "variableName": "fileName",
+                            "value": {
+                                "value": "@join(variables('fileNamesCopy'),', ')",
+                                "type": "Expression"
+                            }
+                        }
+                    }
+                ],
+                "parameters": {
+                    "containerName": {
+                        "type": "string",
+                        "defaultValue": "[parameters('containerName')]"
+                    },
+                    "schemaName": {
+                        "type": "string",
+                        "defaultValue": "[parameters('schemaName')]"
+                    },
+                    "EmailTo": {
+                        "type": "string",
+                        "defaultValue": "[parameters('EmailTo')]"
+                    },
+                    "From": {
+                        "type": "string",
+                        "defaultValue": "[parameters('EmailFrom')]"
+                    }
+                },
+                "variables": {
+                    "fileNamesCopy": {
+                        "type": "Array"
+                    },
+                    "fileName": {
+                        "type": "String"
+                    }
+                },
+                "folder": {
+                    "name": "SynapseDataExporter/ExportSingleSchemaDataToJsonl"
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-04-26T11:47:25Z"
+            },
+            "dependsOn": [
+            ]
+        }
+        
+    ],
+
+    "outputs": {}
+}

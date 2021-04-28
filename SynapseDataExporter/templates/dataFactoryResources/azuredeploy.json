@@ -1,0 +1,360 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus"
+         },
+        
+        "sqlDBPoolName": {
+            "type": "string",
+            "defaultValue": "synapsesqlpool",
+            "metadata": {
+                "description": "Database name should not match special patterns,The value has a length of at most 115. Database name should not contain reserved words.No database with the same name exists in the server"
+            }
+        },
+        "synapseWorkSpaceName": {
+            "type": "string",
+            "defaultValue": "testsynapsews",
+            "metadata": {
+                "description": "Server name must be at least 1 characters and at most 50 characters. Server name must only contain lowercase letters, numbers, and hyphens. The server name must not start or end in a hyphen."
+            } 
+        },
+
+       "administratorLogin": {
+             "type": "string",
+             "metadata": {
+                 "description": "Your login name must not contain a SQL Identifier or a typical system name (like admin, administrator, sa, root, dbmanager, loginmanager, etc.) or a built-in database user or role (like dbo, guest, public, etc.). "
+             }
+        },
+        "schemaName": {
+            "type": "string",
+            "defaultValue": "covid",
+            "metadata": {
+                "description": "Enter the name of schema to extract data"
+            }
+        },
+        "tableName": {
+            "type": "string",
+            "defaultValue": "covid_british_columbia",
+            "metadata": {
+                "description": "Enter the name of table to extract data"
+            }
+         },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "synapsesqlpooldata",
+            "metadata": {
+                "description": "Enter the name of blob storage container to store the data"
+            }
+        },
+        "datasetName": {
+            "type": "string",
+            "defaultValue": "covid_british_columbia",
+            "metadata": {
+                "description": "Enter the dataset name which will be the name of data stored in blob storage container?"
+            }
+        },
+
+        "keyVaultName": {
+            "type": "string",
+            "metadata": {
+              "description": "Specifies the name of the key vault."
+            }
+          }
+    },
+    "variables": {
+        "factoryId": "[resourceId('Microsoft.DataFactory/factories/', parameters('factoryName'))]",
+        "fullyQualifiedDomainName": ".sql.azuresynapse.net"
+
+    },
+    "resources": [
+
+        {
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('factoryName')]",
+            "location": "[parameters('location')]",
+            "properties": {},
+            "identity": {
+                "type": "SystemAssigned"
+            },
+
+            "resources": [
+        
+  
+                    {
+                        "name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+                        "type": "Microsoft.DataFactory/factories/integrationRuntimes",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "type": "Managed",
+                            "typeProperties": {
+                                "computeProperties": {
+                                    "location": "AutoResolve",
+                                    "dataFlowProperties": {
+                                        "computeType": "General",
+                                        "coreCount": 8,
+                                        "timeToLive": 0
+                                    }
+                                }
+                            }
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]"
+                        ]
+                    },
+                    {
+                    "name": "[concat(parameters('factoryName'), '/SynapseDataExporterLinkedService')]",
+                    "type": "Microsoft.DataFactory/factories/linkedServices",
+                    "apiVersion": "2018-06-01",
+                    "properties": {
+                        "annotations": [],
+                        "type": "AzureKeyVault",
+                        "typeProperties": {
+                            "baseUrl": "[concat('https://',parameters('keyVaultName'),'.vault.azure.net')]"
+                        }
+                    },
+                    "dependsOn": [
+                        "[parameters('factoryName')]",
+                         "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+                    ]
+                },
+                    {
+                        "name": "[concat(parameters('factoryName'), '/AzureBlobStorageLinkedService')]",
+                        "type": "Microsoft.DataFactory/factories/linkedServices",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "annotations": [],
+                            "type": "AzureBlobStorage",
+                            "typeProperties": {
+                                    "connectionString": {
+                                        "type": "AzureKeyVaultSecret",
+                                        "store": {
+                                            "referenceName": "SynapseDataExporterLinkedService",
+                                            "type": "LinkedServiceReference"
+                                        },
+                                        "secretName": "storageAccountConnectionString"
+                                    }
+                                },
+                            "connectVia": {
+                                "referenceName": "AutoResolveIntegrationRuntime",
+                                "type": "IntegrationRuntimeReference"
+                            }
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]",
+                            "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                            "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
+                        ]
+                    },
+
+                    {
+                            "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsLinkedService')]",
+                            "type": "Microsoft.DataFactory/factories/linkedServices",
+                            "apiVersion": "2018-06-01",
+                            "properties": {
+                                "annotations": [],
+                                "type": "AzureSqlDW",
+                                "typeProperties": {
+                                    "connectionString": "[concat('Server=tcp:',parameters('synapseWorkSpaceName'), variables('fullyQualifiedDomainName'),',1433;Initial Catalog=', parameters('sqlDBPoolName'),';User Id=', parameters('administratorLogin'), '@', parameters('synapseWorkSpaceName'), ';Trusted_Connection=False;Encrypt=True;Connection Timeout=30;MultipleActiveResultSets=True')]",
+                                    "password": {
+                                        "type": "AzureKeyVaultSecret",
+                                        "store": {
+                                            "referenceName": "SynapseDataExporterLinkedService",
+                                            "type": "LinkedServiceReference"
+                                        },
+                                        "secretName": "synapseAnalyticsLoginPassword"
+                                    }
+                                },
+                                "connectVia": {
+                                    "referenceName": "AutoResolveIntegrationRuntime",
+                                    "type": "IntegrationRuntimeReference"
+                                }
+                            },
+                            "dependsOn": [
+                                "[parameters('factoryName')]",
+                                "[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+                                "[concat(variables('factoryId'), '/linkedServices/SynapseDataExporterLinkedService')]"
+                            ]
+                     },
+
+                    {
+                        "name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable')]",
+                        "type": "Microsoft.DataFactory/factories/datasets",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "linkedServiceName": {
+                                "referenceName": "AzureSynapseAnalyticsLinkedService",
+                                "type": "LinkedServiceReference"
+                            },
+                            "parameters": {
+                                "tableName": {
+                                    "type": "string"
+                                },
+                                "schemaName": {
+                                    "type": "string"
+                                }
+                            },
+                            "folder": {
+                                "name": "SynapseDataset"
+                            },
+                            "annotations": [],
+                            "type": "AzureSqlDWTable",
+                            "schema": [],
+                            "typeProperties": {
+                                "schema": {
+                                    "value": "@dataset().schemaName",
+                                    "type": "Expression"
+                                },
+                                "table": {
+                                    "value": "@dataset().tableName",
+                                    "type": "Expression"
+                                }
+                            }
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]",
+                            "[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalyticsLinkedService')]"
+                        ]
+                    },
+                    {
+                        "name": "[concat(parameters('factoryName'), '/BlobData')]",
+                        "type": "Microsoft.DataFactory/factories/datasets",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "linkedServiceName": {
+                                "referenceName": "AzureBlobStorageLinkedService",
+                                "type": "LinkedServiceReference"
+                            },
+                            "parameters": {
+                                "containerName": {
+                                    "type": "string"
+                                },
+                                "datasetName": {
+                                    "type": "string"
+                                }
+                            },
+                            "folder": {
+                                "name": "CsvDataset"
+                            },
+                            "annotations": [],
+                            "type": "DelimitedText",
+                            "typeProperties": {
+                                "location": {
+                                    "type": "AzureBlobStorageLocation",
+                                    "fileName": {
+                                        "value": "@dataset().datasetName",
+                                        "type": "Expression"
+                                    },
+                                    "container": {
+                                        "value": "@dataset().containerName",
+                                        "type": "Expression"
+                                    }
+                                },
+                                "columnDelimiter": ",",
+                                "escapeChar": "\\",
+                                "firstRowAsHeader": true,
+                                "quoteChar": "\""
+                            },
+                            "schema": []
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]",
+                            "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+                        ]
+                    },
+                    {
+                        "name": "[concat(parameters('factoryName'), '/BlobDataParquet')]",
+                        "type": "Microsoft.DataFactory/factories/datasets",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "linkedServiceName": {
+                                "referenceName": "AzureBlobStorageLinkedService",
+                                "type": "LinkedServiceReference"
+                            },
+                            "parameters": {
+                                "containerName": {
+                                    "type": "string"
+                                },
+                                "datasetName": {
+                                    "type": "string"
+                                }
+                            },
+                            "folder": {
+                                "name": "ParquetDataset"
+                            },
+                            "annotations": [],
+                            "type": "Parquet",
+                            "typeProperties": {
+                                "location": {
+                                    "type": "AzureBlobStorageLocation",
+                                    "fileName": {
+                                        "value": "@dataset().datasetName",
+                                        "type": "Expression"
+                                    },
+                                    "container": {
+                                        "value": "@dataset().containerName",
+                                        "type": "Expression"
+                                    }
+                                },
+                                "compressionCodec": "snappy"
+                            },
+                            "schema": []
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]",
+                            "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+                        ]
+                    },
+                    {
+                        "name": "[concat(parameters('factoryName'), '/BlobDataJson')]",
+                        "type": "Microsoft.DataFactory/factories/datasets",
+                        "apiVersion": "2018-06-01",
+                        "properties": {
+                            "linkedServiceName": {
+                                "referenceName": "AzureBlobStorageLinkedService",
+                                "type": "LinkedServiceReference"
+                            },
+                            "parameters": {
+                                "containerName": {
+                                    "type": "string"
+                                },
+                                "datasetName": {
+                                    "type": "string"
+                                }
+                            },
+                            "folder": {
+                                "name": "JsonDataset"
+                            },
+                            "annotations": [],
+                            "type": "Json",
+                            "typeProperties": {
+                                "location": {
+                                    "type": "AzureBlobStorageLocation",
+                                    "fileName": {
+                                        "value": "@dataset().datasetName",
+                                        "type": "Expression"
+                                    },
+                                    "container": {
+                                        "value": "@dataset().containerName",
+                                        "type": "Expression"
+                                    }
+                                }
+                            },
+                            "schema": {}
+                        },
+                        "dependsOn": [
+                            "[parameters('factoryName')]",
+                            "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkedService')]"
+                        ]
+                    }
+            ]
+        }
+    ],
+    "outputs": {}
+}

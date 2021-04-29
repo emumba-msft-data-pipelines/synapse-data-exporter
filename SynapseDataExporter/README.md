@@ -8,13 +8,16 @@
 
 ## Synapse Data Exporter
 
-#### Introduction:
+#### 1. Introduction:
 Synapse Data Exporter (SDE) is a tool that allows the customer to export data from Synapse Analytics to Azure Blob Storage. 
 The solution helps customers in reducing the cost of data storage and also helps them run analysis on the data after it is exported to blob storage since blob storage is supported as a source in almost all Azure data analysis services.By exporting data to Blob storage the data analysts are able to query the data directly from multiple Azure services such as DataBricks, Streaming Analytics, Event Hub, and Power BI.
 
 It’s helpful in the downstream model where there is a system built within an organization, where people seek this aggregated data and use it for different purposes.
 
-#### Technical Details
+#### 2. Architecture
+![Architecture](./images/synapseDataExporter/architecture.png)
+
+#### 3. Technical Details
 
 The main use of synapse data exporter is to extract data from synapse analytics and store data in azure blob storage account with the support of **CSV**, **JSON**, **JSONL** and **PARQUET** formats.
 
@@ -26,12 +29,10 @@ c. Export entire data from synapse analytics
      
      **Total Pipelines: 3 use cases x 4 file formats = 12**
      
+     Once you deploy the ARM template all the **12 pipelines** will be deployed in the Azure Data Factory. You can execute the pipeline as per requirement and file format that you need.
+     
 ![pipeline](./images/synapseDataExporter/pipelines.png)
 
-#### Architecture
-![Architecture](./images/synapseDataExporter/architecture.png)
-
-Once you deploy the ARM template all the **12 pipelines** will be deployed in the Azure Data Factory. You can execute the pipeline as per requirement and file format that you need.
 
 #### Prerequisites:
 1. Resource group for the deployment.
@@ -73,7 +74,7 @@ Once the template is deployed following resources will be created
 
 Open the deployed data factory it will contain 12 pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
 
-## Technical Details
+## 3. Technical Details
 
 Once you open the deployed data factory, click the manage icon from the extreme left, you will notice three linked templates created for storage account, synapse analytics and key vault
 
@@ -137,7 +138,9 @@ You need to provide following parameters before for executing the pipeline
 
 ![PARQUET Format](./images/synapseDataExporter/sc1PipelineParquet.png)
 
-#### Pipeline workflow explanation for Scenario1
+#### 4. Pipeline workflow explanation for each scenario
+
+####Scenario1: Exporting a specific table
 
 #### Step1: Copy activity
  
@@ -356,7 +359,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![web-activity-body](./images/synapseDataExporter/sc3WebActivity.png.png)
 
-#### Setfup and Configure Notifications for MS Teams and Outlook using App logic
+#### 5. Setfup and Configure Notifications for MS Teams and Outlook using App logic
 
 #### Step1: Authenticating Microsoft Teams account with Azure Logic App
 

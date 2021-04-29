@@ -3,7 +3,7 @@
 2. Architecture
 3. Technical details
 4. Pipeline workflow explanation for each scenario
-5. Setfup and Configure Notifications for MS Teams and Outlook for each scenario
+5. Setfup and Configure Notifications for MS Teams and Outlook using App logic
  
 
 ## Synapse Data Exporter
@@ -73,6 +73,22 @@ Once the template is deployed following resources will be created
 
 Open the deployed data factory it will contain 12 pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
 
+## Technical Details
+
+Once you open the deployed data factory, click the manage icon from the extreme left, you will notice three linked templates created for storage account, synapse analytics and key vault
+
+
+![Linked services](./images/synapseDataExporter/linkedServices.png)
+
+
+Synapse analytics linked service for establishing connection with it.
+
+![synapse-linkedservice](./images/synapseDataExporter/synapseLinkedService.png)
+
+Azure Blob Storage linked service for establishing connection with it.
+
+![blobstorage-linkedservice](./images/synapseDataExporter/storageLinkedSerice.png)
+
 ####Scenario1: Exporting specific table from synapse analytics
 
 Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
@@ -123,20 +139,7 @@ You need to provide following parameters before for executing the pipeline
 
 #### Pipeline workflow explanation for Scenario1
 
-#### Step1: Three linked services are created for synapse analytics, blob storage account and key vault name
-
-![Linked services](./images/synapseDataExporter/linkedServices.png)
-
-
-Synapse analytics linked service for establishing connection with it.
-
-![synapse-linkedservice](./images/synapseDataExporter/synapseLinkedService.png)
-
-Azure Blob Storage linked service for establishing connection with it.
-
-![blobstorage-linkedservice](./images/synapseDataExporter/storageLinkedSerice.png)
-
-#### Step2: Copy activity
+#### Step1: Copy activity
  
  Copy actvity is used which gets the table name from the synapse analytics and copies into the given blob storage account.
  Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
@@ -148,7 +151,7 @@ Azure Blob Storage linked service for establishing connection with it.
 ![copy-activity-sink](./images/scenario1/Scenario1CopyDataSink.png)
 
 
-#### Step3: Web Activity is used to send file name to logic app for notifications along with other parameters
+#### Step2: Web Activity is used to send file name to logic app for notifications along with other parameters
 
 Inside settings of web activity **logic app end point URL** is provided and required parameters values are passed in the body 
 
@@ -157,7 +160,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![web-activity-body](./images/synapseDataExporter/sc1WebActivityCSV.png)
 
-#### Step4: Setup and Configure Notifications for MS Teams and Outlook
+#### Step3: Setup and Configure Notifications for MS Teams and Outlook
 
 Once template is deployed you will find the app logic resouorce created, it will contain the logic for sending notification to ms teams and outlook
 
@@ -169,7 +172,7 @@ Once template is deployed you will find the app logic resouorce created, it will
 
 ![Logic App outlook](./images/scenario1/sc1-applogic4.png)
 
-#### Step5 Authenticating Microsoft Teams account with Azure Logic App
+#### Step4 Authenticating Microsoft Teams account with Azure Logic App
 
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
@@ -299,52 +302,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![web-activity-body](./images/synapseDataExporter/sc2Webactivity.png)
 
-#### Step6: Authenticating Microsoft Teams account with Azure Logic App
 
-
-1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
-
-![connection_image_sc2](./images/scenario1/editapiconnections.jpg)
-
-2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the team account credentials and it will authorize you to your team's account.
-
-![authorize_image_sc2](./images/scenario1/authorizeTeams.jpg)
-
-3. Click on **"Save"** to save the authorization information and navigate to resource group.
-
-4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
-
-![designer_image_sc2](./images/scenario1/sc1AppLogic.png)
-
-#### Step8: Authenticating Microsoft Outlook account with Azure Logic App
-
-1. First, navigate to the resource group that contains your deployment and find the resource titled **"outlook"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
-
-![connection_image_sc2](./images/scenario1/editapiconnections.jpg)
-
-2. In the window there will be a button titled **"Authorize"**, click on it and it will open up Microsoft sign-in page. Enter the outlook account credentials and it will authorize you to your outlook's account.
-
-![authorize_image](./images/scenario1/authorizeoutlook.png)
-
-3. Click on **"Save"** to save the authorization information and navigate to resource group.
-
-4. Now click on the deployed logic app, the default name of which is **"TeamsNotify"**. Click on the option **"Logic app designer"** from the sidebar under heading **"Development tools"**. This will open a visual editor, if there was problem connecting to teams then it will display connection error. In that case, refer back to step 1.
-
-![designer_image](./images/scenario2/logicAppDesigner.png)
-
-#### Step9: Logic App contains the logic for sending notifications from azure data factory to ms teams and outlook 
-
-1. Inside the logic app designere action of **when a HTTP request is received** is selected which contains the json paylod. This will also provide end point url of logic app.
-
-![logic-app-http-payload](./images/scenario2/logicApphttp.png)
-
-2. New action for ms teams **Post a message V3** is added which will be used to send notification to ms teams.
-
-![app-logic-teams](./images/scenario2/logicAppTeams.png)
-
-3. New action for Microsoft outlook **Send an email V2** is added which will be used to send notification via email.
-
-![app-logic-outlook](./images/scenario2/logicAppOutlook.png)
 
 #### Scenario3: Exporting all data from synapse analytics
 
@@ -356,28 +314,28 @@ You need to provide following parameters before for executing the pipeline
 2. EmailTo
 3. From
 
-![CSV Format](./images/scenario3/sc3PipelineCsv.png)
+![CSV Format](./images/synapseDataExporter/sc3PipelineCsv.png)
 
 Pipeline For Exporting Data To JSON Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![JSON Format](./images/scenario3/Sc3PipelineJson.png)
+![JSON Format](./images/synapseDataExporter/Sc3PipelineJson.png)
 
 Pipeline For Exporting Data To JSONL Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![JSONL Format](./images/scenario3/Sc3PipelineJsonl.png)
+![JSONL Format](./images/synapseDataExporter/Sc3PipelineJsonl.png)
 
 Pipeline For Exporting Data To PARQUET Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![parquet Format](./images/scenario3/Sc3PipelineParquet.png)
+![parquet Format](./images/synapseDataExporter/Sc3PipelineParquet.png)
 
 #### Step1: Lookup activity for getting tables list
    
@@ -441,9 +399,11 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 ![web-activity](./images/synapseDataExporter/sc3WebActivity.png)
 
 
-![web-activity-body](./images/synapseDataExporter/web-activity2.png)
+![web-activity-body](./images/synapseDataExporter/sc3WebActivity.png.png)
 
-#### Step7: Authenticating Microsoft Teams account with Azure Logic App
+#### Setfup and Configure Notifications for MS Teams and Outlook using App logic
+
+#### Step1: Authenticating Microsoft Teams account with Azure Logic App
 
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
@@ -460,7 +420,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![designer_image](./images/scenario1/sc1AppLogic.png)
 
-#### Step8: Authenticating Microsoft Outlook account with Azure Logic App
+#### Step2: Authenticating Microsoft Outlook account with Azure Logic App
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"outlook"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
 
@@ -476,7 +436,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![designer_image_sc2](./images/scenario2/logicAppDesigner.png)
 
-#### Step9: Logic App contains the logic for sending notifications from azure data factory to ms teams and outlook 
+#### Step3: Logic App contains the logic for sending notifications from azure data factory to ms teams and outlook 
 
 1. Inside the logic app designere action of **when a HTTP request is received** is selected which contains the json paylod. This will also provide end point url of logic app.
 
@@ -488,4 +448,4 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 3. New action for Microsoft outlook **Send an email V2** is added which will be used to send notification via email.
 
-![app-logic-outlook](./images/scenario2/logicAppOutlook.png)
+![app-logic-outlook](./images/synapseDataExporter/outlogicapp.png)

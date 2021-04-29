@@ -155,7 +155,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 ![web-activity](./images/scenario1/scenario1WebActivity.png)
 
 
-![web-activity-body](./images/scenario1/Scenario1WebActivityBody.png)
+![web-activity-body](./images/synapseDataExporter/sc1WebActivityCSV.png)
 
 #### Step4: Setup and Configure Notifications for MS Teams and Outlook
 
@@ -203,6 +203,7 @@ Once template is deployed you will find the app logic resouorce created, it will
 ![designer-image-sc2](./images/scenario1/sc1AppLogic.png)
 
 #### Scenario2: Exporting a specific schema from synapse analytics.
+
 Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
@@ -239,17 +240,7 @@ You need to provide following parameters before for executing the pipeline
 
 #### Pipeline workflow explanation
 
-#### Step1: Two linked services are created for synapse analytics and blob storage account
-
-Synapse analytics linked service for establishing connection with it.
-
-![synapse-linkedservice](./images/scenario2/synapseLinkedService.png)
-
-Azure Blob Storage linked service for establishing connection with it.
-
-![blobstorage-linkedservice](./images/scenario2/blob-storage-linkedService.png)
-
-#### Step2: Lookup activity for getting tables list
+#### Step1: Lookup activity for getting tables list
    
    Lookup activity is used to get the tables information. In the settings tab source dataset synapse linked service is selected from where data will be fetched.
    In the query section query is written which fetches all the tables of given schema
@@ -258,14 +249,14 @@ Azure Blob Storage linked service for establishing connection with it.
 
 ![lookup-query](./images/scenario2/get-tables-query.png)
 
-#### Step3: For each activity 
+#### Step2: For each activity 
    
    For each activity is used which iterates the table name one by one
  
 ![for-each](./images/scenario2/for-each-loop.png)
  
  
-#### Step4: Copy activity inside For each activity
+#### Step3: Copy activity inside For each activity
  
  Copy actvity is used which gets the each table name from the synapse analytics and copies into the given blob storage account.
  Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
@@ -280,7 +271,7 @@ Dataset name is created by combining schema name and table table
 
 ![dataset-name](./images/scenario2/copy-data-datasetName.png)
 
-#### Step5: Using get variables and set variables activity to get the list of cocpied files
+#### Step4: Using get variables and set variables activity to get the list of cocpied files
 
 1. Two variables with the names **fileNamesCopy** and **fileName** are created
 
@@ -299,16 +290,16 @@ Dataset name is created by combining schema name and table table
 ![set-variable-activity](./images/scenario2/set-variable.png)
 
 
-#### Step6: Web Activity is used to send list of files to logic app for notifications along with other parameters
+#### Step5: Web Activity is used to send list of files to logic app for notifications along with other parameters
 
 Inside settings of web activity **logic app end point URL** is provided and required parameters values are passed in the body 
 
 ![web-activity](./images/scenario2/web-activity.png)
 
 
-![web-activity-body](./images/scenario2/web-activity2.png)
+![web-activity-body](./images/synapseDataExporter/sc2Webactivity.png)
 
-#### Step7: Authenticating Microsoft Teams account with Azure Logic App
+#### Step6: Authenticating Microsoft Teams account with Azure Logic App
 
 
 1. First, navigate to the resource group that contains your deployment and find the resource titled **"msftTeamsConnectionAuth"**. Click on it and navigate to its **"Edit API connection"** option from the sidebar. 
@@ -363,6 +354,7 @@ Pipeline For Exporting Data To CSV Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
+3. From
 
 ![CSV Format](./images/scenario3/sc3PipelineCsv.png)
 
@@ -387,33 +379,21 @@ You need to provide following parameters before for executing the pipeline
 
 ![parquet Format](./images/scenario3/Sc3PipelineParquet.png)
 
-#### Pipeline workflow explanation
-
-#### Step1: Two linked services are created for synapse analytics and blob storage account
-
-Synapse analytics linked service for establishing connection with it.
-
-![synapse-linkedservice](./images/scenario2/synapseLinkedService.png)
-
-Azure Blob Storage linked service for establishing connection with it.
-
-![blobstorage-linkedservice](./images/scenario2/blob-storage-linkedService.png)
-
-#### Step2: Lookup activity for getting tables list
+#### Step1: Lookup activity for getting tables list
    
    Lookup activity is used to get the tables information. In the settings tab source dataset synapse linked service is selected from where data will be fetched.
    In the query section query is written which fetches all the tables of given schema
    
-![lookup-get-tables](./images/scenario2/lookup-get-tables.png)
+![lookup-get-tables](./images/synapseDataExporter/sc3lookup.png)
 
 Query is written for getting all schemas tables
-![lookup-query](./images/scenario3/get-tables-query.png)
+![lookup-query](./images/synapseDataExporter/sc3lookupQuery.png)
 
 #### Step3: For each activity 
    
    For each activity is used which iterates the table name one by one
  
-![for-each](./images/scenario2/for-each-loop.png)
+![for-each](./images/synapseDataExporter/sc3Foreach.png)
  
  
 #### Step4: Copy activity inside For each activity
@@ -421,43 +401,47 @@ Query is written for getting all schemas tables
  Copy actvity is used which gets the each table name from the synapse analytics and copies into the given blob storage account.
  Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
  
-![copy-activity-source](./images/scenario2/copy-data-source.png)
+![copy-activity-source](./images/synapseDataExporter/sc3copysource.png)
 
  In the sink of copy activity, dataset of desired format is selected and containing parameters of containerName and datasetName
  
-![copy-activity-sink](./images/scenario2/copy-data-sink.png)
+![copy-activity-sink](./images/synapseDataExporter/sc3CopySink.png)
 
 Dataset name is created by combining schema name and table table 
 
-![dataset-name](./images/scenario2/copy-data-datasetName.png)
+![dataset-name](./images/synapseDataExporter/sc3CopySinkQuery.png)
 
 #### Step5: Using get variables and set variables activity to get the list of cocpied files
 
-1. Two variables with the names **fileNamesCopy** and **fileName** are created
+1. Four variables with the names **fileNamesCopy**, **fileName**, **schemaNameCopy** and **schemaName** are createed
 
-![variables](./images/scenario2/Variables.png)
+![variables](./images/synapseDataExporter/sc3Variables.png)
 
-2. Get variables activity is used inside for each activity to get table name each time the for each activity is executed and which is stored in **fileNamesCopy** variable
+2. Get variables activity is used inside for each activity to get table name each time the for each activity is executed and which is stored in **fileNamesCopy** variable.
+The value of filename is created by concatenating schema name and table name
 
-![variables-apped](./images/scenario2/vairables-append.png)
+![variables-apped](./images/synapseDataExporter/sc3AppendFileame.png)
 
-3. The value of filename is created by concatenating schema name and table name
+3. Get variables activity is used inside for each activity to get schema name each time the for each activity is executed and which is stored in **SchemaNameCopy** variable.
 
-![variables-apped-value](./images/scenario2/vairable-append-value.png)
+![variables-apped-schema](./images/synapseDataExporter/sc3AppendSchema.png) 
 
 4. Set variables activity is used outside the for each activity which will contain the comma separated list of values and will be stored in another variable named **fileName**
 
-![set-variable-activity](./images/scenario2/set-variable.png)
+![set-variable-activity](./images/synapseDataExporter/sc3SetFileList.png)
 
+4. Set variables activity is used outside the for each activity which will contain the comma separated list of values and will be stored in another variable named **fileName**
+
+![set-variable-schema](./images/synapseDataExporter/Sc3SetSchemaList.png)
 
 #### Step6: Web Activity is used to send list of files to logic app for notifications along with other parameters
 
 Inside settings of web activity **logic app end point URL** is provided and required parameters values are passed in the body 
 
-![web-activity](./images/scenario2/web-activity.png)
+![web-activity](./images/synapseDataExporter/sc3WebActivity.png)
 
 
-![web-activity-body](./images/scenario2/web-activity2.png)
+![web-activity-body](./images/synapseDataExporter/web-activity2.png)
 
 #### Step7: Authenticating Microsoft Teams account with Azure Logic App
 

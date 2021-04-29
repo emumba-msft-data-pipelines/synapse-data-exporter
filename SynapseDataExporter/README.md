@@ -9,7 +9,8 @@
 ## Synapse Data Exporter
 
 #### Introduction:
-	Synapse Data Exporter (SDE) is a tool that allows the customer to export data from Synapse Analytics to Azure Blob Storage. The solution helps customers in reducing the cost of data storage and also helps them run analysis on the data after it is exported to blob storage since blob storage is supported as a source in almost all Azure data analysis services.By exporting data to Blob storage the data analysts are able to query the data directly from multiple Azure services such as DataBricks, Streaming Analytics, Event Hub, and Power BI.
+Synapse Data Exporter (SDE) is a tool that allows the customer to export data from Synapse Analytics to Azure Blob Storage. 
+The solution helps customers in reducing the cost of data storage and also helps them run analysis on the data after it is exported to blob storage since blob storage is supported as a source in almost all Azure data analysis services.By exporting data to Blob storage the data analysts are able to query the data directly from multiple Azure services such as DataBricks, Streaming Analytics, Event Hub, and Power BI.
 
 It’s helpful in the downstream model where there is a system built within an organization, where people seek this aggregated data and use it for different purposes.
 
@@ -25,7 +26,7 @@ c. Export entire data from synapse analytics
      
      **Total Pipelines:** 3 use cases x 4 file formats = **12**
      
-![pipeline](./images/synapseDataExporter/pipeline.png)
+![pipeline](./images/synapseDataExporter/pipelines.png)
 
 #### Architecture
 ![Architecture](./images/synapseDataExporter/architecture.png)
@@ -68,9 +69,13 @@ Once the template is deployed following resources will be created
 5. App logic
 6. Key Vault
 
-![Resources Created](./images/scenario1/sc1-resources.png)
+![Resources Created](./images/synapseDataExporter/resources.png)
 
-Open the deployed data factory it will contain four pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
+Open the deployed data factory it will contain 12 pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
+
+####Scenario1: Exporting specific table from synapse analytics
+
+Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
 You need to provide following parameters before for executing the pipeline
@@ -79,8 +84,9 @@ You need to provide following parameters before for executing the pipeline
 3. containerName
 4. datasetName
 5. EmailTo
+6. From
 
-![CSV Format](./images/scenario1/scenario1PipelineCSV.png)
+![CSV Format](./images/synapseDataExporter/sc1PipelineCSV.png)
 
 Pipeline For Exporting Data To JSON Format
 You need to provide following parameters before for executing the pipeline
@@ -89,8 +95,9 @@ You need to provide following parameters before for executing the pipeline
 3. containerName
 4. datasetName
 5. EmailTo
+6. From
 
-![JSON Format](./images/scenario1/scenario1PipelineJson.png)
+![JSON Format](./images/synapseDataExporter/sc1PipelineJson.png)
 
 Pipeline For Exporting Data To JSONL Format
 You need to provide following parameters before for executing the pipeline
@@ -99,8 +106,9 @@ You need to provide following parameters before for executing the pipeline
 3. containerName
 4. datasetName
 5. EmailTo
+6. From
 
-![JSON Format](./images/scenario1/scenario1PipelineJsonl.png)
+![JSONL Format](./images/synapseDataExporter/sc1pipelineJsonl.png)
 
 Pipeline For Exporting Data To PARQUET Format
 You need to provide following parameters before for executing the pipeline
@@ -109,20 +117,24 @@ You need to provide following parameters before for executing the pipeline
 3. containerName
 4. datasetName
 5. EmailTo
+6. From
 
-![JSON Format](./images/scenario1/scenario1PipelineParquet.png)
+![PARQUET Format](./images/synapseDataExporter/sc1PipelineParquet.png)
 
-#### Pipeline workflow explanation
+#### Pipeline workflow explanation for Scenario1
 
-#### Step1: Two linked services are created for synapse analytics and blob storage account
+#### Step1: Three linked services are created for synapse analytics, blob storage account and key vault name
+
+![Linked services](./images/synapseDataExporter/linkedServices.png)
+
 
 Synapse analytics linked service for establishing connection with it.
 
-![synapse-linkedservice](./images/scenario2/synapseLinkedService.png)
+![synapse-linkedservice](./images/synapseDataExporter/synapseLinkedService.png)
 
 Azure Blob Storage linked service for establishing connection with it.
 
-![blobstorage-linkedservice](./images/scenario2/blob-storage-linkedService.png)
+![blobstorage-linkedservice](./images/synapseDataExporter/storageLinkedSerice.png)
 
 #### Step2: Copy activity
  
@@ -190,48 +202,16 @@ Once template is deployed you will find the app logic resouorce created, it will
 
 ![designer-image-sc2](./images/scenario1/sc1AppLogic.png)
 
-#### Scenario2
-#### Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
-
-#### Prerequisites:
-1. Resource group for the deployment.
-2. Azure Synapse Analytics
-
-#### To be provided
-1. Resource Group
-2. Data Factory Name
-3. Location
-4. Storage Account Name (option for **new** or **existing**)
-5. Sql DB Pool Name
-6. Synapse Workspace Name
-7. Administration Login: synapse username
-8. Administration Password
-9. Schema Name: Name of schema from which you want to copy data
-10. Container Name: The name of blob storage container where you want to copy data
-11. Logic App Name
-
-Click the following button to deploy all the resources.
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fsynapse-data-exporter%2Freadme-update%2FSynapseDataExporter%2FCopyAllTablesOfSchema%2FallTablesFromSynapseToBlobArmTemplate.json)
-
-Once the template is deployed following resources will be created 
-1. Azure Data Factory
-2. Storage Account
-3. API connection for ms teams
-4. API connection for outlook
-5. App logic
-
-![Resources Created](./images/scenario2/resources.png)
-
-Open the deployed data factory it will contain four pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
+#### Scenario2: Exporting a specific schema from synapse analytics.
+Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
-You need to provide following parameters before for executing the pipeline
+You need to provide following parameters before executing the pipeline
 1. containerName
 2. schemaName
 5. EmailTo
 
-![CSV Format](./images/scenario2/pipelineCsv.png)
+![CSV Format](./images/synapseDataExporter/Sc2PipelineCsv.png)
 
 Pipeline For Exporting Data To JSON Format
 You need to provide following parameters before for executing the pipeline
@@ -239,7 +219,7 @@ You need to provide following parameters before for executing the pipeline
 2. schemaName
 5. EmailTo
 
-![JSON Format](./images/scenario2/pipelineJson.png)
+![JSON Format](./images/synapseDataExporter/sc2PipelineJson.png)
 
 Pipeline For Exporting Data To JSONL Format
 You need to provide following parameters before for executing the pipeline
@@ -247,7 +227,7 @@ You need to provide following parameters before for executing the pipeline
 2. schemaName
 5. EmailTo
 
-![JSONL Format](./images/scenario2/pipelineJsonl.png)
+![JSONL Format](./images/synapseDataExporter/Sc2PipelineParquet.png)
 
 Pipeline For Exporting Data To PARQUET Format
 You need to provide following parameters before for executing the pipeline
@@ -255,7 +235,7 @@ You need to provide following parameters before for executing the pipeline
 2. schemaName
 5. EmailTo
 
-![parquet Format](./images/scenario2/pipelineParquet.png)
+![parquet Format](./images/synapseDataExporter/Sc2PipelineParquet.png)
 
 #### Pipeline workflow explanation
 
@@ -375,67 +355,37 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![app-logic-outlook](./images/scenario2/logicAppOutlook.png)
 
-#### Scenario3
-#### Copy all data from  into azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+#### Scenario3: Exporting all data from synapse analytics
 
-#### Prerequisites:
-1. Resource group for the deployment.
-2. Azure Synapse Analytics
-
-#### To be provided
-1. Resource Group
-2. Data Factory Name
-3. Location
-4. Storage Account Name (option for **new** or **existing**)
-5. Sql DB Pool Name
-6. Synapse Workspace Name
-7. Administration Login: synapse username
-8. Administration Password
-9. Container Name: The name of blob storage container where you want to copy data
-10. Logic App Name
-
-Click the following button to deploy all the resources.
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fsynapse-data-exporter%2Freadme-update%2FSynapseDataExporter%2FCopyAllSchemas%2FallScehmaTablesFromSynapseToBlob.json)
-
-Once the template is deployed following resources will be created 
-1. Azure Data Factory
-2. Storage Account
-3. API connection for ms teams
-4. API connection for outlook
-5. App logic
-
-![Resources Created](./images/scenario2/resources.png)
-
-Open the deployed data factory it will contain four pipelines for copying data to blob storage with support of CSV, JSON, JSONL and Parquet formats as shown below.
+ Copy all data from  into azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![CSV Format](./images/scenario3/pipelineCsv.png)
+![CSV Format](./images/scenario3/sc3PipelineCsv.png)
 
 Pipeline For Exporting Data To JSON Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![JSON Format](./images/scenario3/pipelineJson.png)
+![JSON Format](./images/scenario3/Sc3PipelineJson.png)
 
 Pipeline For Exporting Data To JSONL Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![JSONL Format](./images/scenario3/pipelineJsonl.png)
+![JSONL Format](./images/scenario3/Sc3PipelineJsonl.png)
 
 Pipeline For Exporting Data To PARQUET Format
 You need to provide following parameters before for executing the pipeline
 1. containerName
 2. EmailTo
 
-![parquet Format](./images/scenario3/pipelineParquet.png)
+![parquet Format](./images/scenario3/Sc3PipelineParquet.png)
 
 #### Pipeline workflow explanation
 

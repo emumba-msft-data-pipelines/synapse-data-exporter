@@ -357,7 +357,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 ![web-activity](./images/synapseDataExporter/sc3WebActivity.png)
 
 
-![web-activity-body](./images/synapseDataExporter/sc3WebActivity.png.png)
+![web-activity-body](./images/synapseDataExporter/sc3WebActivity.png)
 
 #### 5. Setfup and Configure Notifications for MS Teams and Outlook using App logic
 

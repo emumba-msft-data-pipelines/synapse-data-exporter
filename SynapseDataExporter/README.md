@@ -90,7 +90,7 @@ Azure Blob Storage linked service for establishing connection with it.
 
 ![blobstorage-linkedservice](./images/synapseDataExporter/storageLinkedSerice.png)
 
-####Scenario1: Exporting specific table from synapse analytics
+#### Scenario1: Exporting specific table from synapse analytics
 
 Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 

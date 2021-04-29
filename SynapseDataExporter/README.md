@@ -27,9 +27,9 @@ a. Export a specific table from synapse analytics
 b. Export specific schema from synapse analytics
 c. Export entire data from synapse analytics
      
-     **Total Pipelines: 3 use cases x 4 file formats = 12**
+     Total Pipelines: 3 use cases x 4 file formats = 12
      
-     Once you deploy the ARM template all the **12 pipelines** will be deployed in the Azure Data Factory. You can execute the pipeline as per requirement and file format that you need.
+     Once you deploy the ARM template all the 12 pipelines will be deployed in the Azure Data Factory. You can execute the pipeline as per requirement and file format that you need.
      
 ![pipeline](./images/synapseDataExporter/pipelines.png)
 

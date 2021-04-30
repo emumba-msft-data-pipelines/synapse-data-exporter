@@ -60,6 +60,7 @@ c. Export entire data from synapse analytics
 
 Click the following button to deploy all the resources.
 
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/ttps%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fsynapse-data-exporter%2Fmain%2FSynapseDataExporter%2Ftemplates%2Fazuredeploy.json)
 
 Once the template is deployed following resources will be created 
@@ -201,7 +202,7 @@ You need to provide following parameters before for executing the pipeline
 
 #### Pipeline workflow explanation
 
-#### Step1: Lookup activity for getting tables list
+#### Step1: Lookup activity for getting the list of table
    
    Lookup activity is used to get the tables information. In the settings tab source dataset synapse linked service is selected from where data will be fetched.
    In the query section query is written which fetches all the tables of given schema

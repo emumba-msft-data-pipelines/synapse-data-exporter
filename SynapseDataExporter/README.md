@@ -10,7 +10,7 @@
 
 #### 1. Introduction:
 Synapse Data Exporter (SDE) is a tool that allows the customer to export data from Synapse Analytics to Azure Blob Storage. 
-The solution helps customers in reducing the cost of data storage and also helps them run analysis on the data after it is exported to blob storage since blob storage is supported as a source in almost all Azure data analysis services.By exporting data to Blob storage the data analysts are able to query the data directly from multiple Azure services such as DataBricks, Streaming Analytics, Event Hub, and Power BI.
+The solution helps customers in reducing the cost of data storage and also helps them run analysis on the data after it is exported to blob storage since blob storage is supported as a source in almost all Azure data analysis services. By exporting data to Blob storage the data analysts are able to query the data directly from multiple Azure services such as DataBricks, Streaming Analytics, Event Hub, and Power BI.
 
 It’s helpful in the downstream model where there is a system built within an organization, where people seek this aggregated data and use it for different purposes.
 
@@ -19,7 +19,7 @@ It’s helpful in the downstream model where there is a system built within an o
 
 #### 3. Technical Details
 
-The main use of synapse data exporter is to extract data from Synapse Analytics and store data in azure blob storage account with the support of **CSV**, **JSON**, **JSONL** and **PARQUET** formats.
+The main use of Synapse Data Exporter is to extract data from Synapse Analytics and store the data in Azure Blob Storage account with the support of **CSV**, **JSON**, **JSONL** and **PARQUET** formats.
 
 This solution provides **03 Scenarios** for exporting data from Synapse Analytics
 
@@ -45,7 +45,7 @@ c. Export entire data from Synapse Analytics
 4. Storage Account Name (option for **new** or **existing**)
 5. Sql DB Pool Name
 6. Synapse Workspace Name
-7. Administration Login: synapse username
+7. Administration Login: Synapse username
 8. Administration Password
 9. Schema Name: Name of schema from which you want to copy data
 10. Table Name: Any table from the given schema that you want to copy
@@ -63,7 +63,7 @@ Click the following button to deploy all the resources.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/ttps%3A%2F%2Fraw.githubusercontent.com%2Femumba-msft-data-pipelines%2Fsynapse-data-exporter%2Fmain%2FSynapseDataExporter%2Ftemplates%2Fazuredeploy.json)
 
-Once the template is deployed following resources will be created 
+Once the template is deployed following resources will be created:- 
 1. Azure Data Factory
 2. Storage Account
 3. API connection for ms teams
@@ -77,23 +77,23 @@ Open the deployed data factory it will contain 12 pipelines for copying data to 
 
 ## 3. Technical Details
 
-Once you open the deployed data factory, click the manage icon from the extreme left, you will notice three linked templates created for storage account, synapse analytics and key vault
+Once you open the deployed data factory, click the manage icon from the extreme left, you will notice three linked templates created for storage account, Synapse Analytics and key vault
 
 
 ![Linked services](./images/synapseDataExporter/linkedServices.png)
 
 
-Synapse analytics linked service for establishing connection with it.
+Synapse Analytics linked service for establishing connection with it.
 
-![synapse-linkedservice](./images/synapseDataExporter/synapseLinkedService.png)
+![Synapse-linkedservice](./images/synapseDataExporter/synapseLinkedService.png)
 
 Azure Blob Storage linked service for establishing connection with it.
 
 ![blobstorage-linkedservice](./images/synapseDataExporter/storageLinkedSerice.png)
 
-#### Scenario1: Exporting specific table from synapse analytics
+#### Scenario 1: Exporting specific table from Synapse Analytics
 
-Take schema name, table name from the user then copy data from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+Take schema name, table name from the user then copy data from Synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
 You need to provide following parameters before for executing the pipeline
@@ -145,8 +145,8 @@ You need to provide following parameters before for executing the pipeline
 
 #### Step1: Copy activity
  
- Copy actvity is used which gets the table name from the synapse analytics and copies into the given blob storage account.
- Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
+ Copy actvity is used which gets the table name from the Synapse Analytics and copies into the given blob storage account.
+ Copy activity source contains Synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
  
 ![copy-activity-source](./images/scenario1/Scenario1copyDataSource.png)
 
@@ -164,9 +164,9 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 ![web-activity-body](./images/synapseDataExporter/sc1WebActivityCSV.png)
 
-#### Scenario2: Exporting a specific schema from synapse analytics.
+#### Scenario2: Exporting a specific schema from Synapse Analytics.
 
-Take schema name then copy all tables of that schema from synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
+Take schema name then copy all tables of that schema from Synapse exporter to azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
 Pipeline For Exporting Data To CSV Format
 You need to provide following parameters before executing the pipeline
@@ -204,7 +204,7 @@ You need to provide following parameters before for executing the pipeline
 
 #### Step1: Lookup activity for getting the list of table
    
-   Lookup activity is used to get the tables information. In the settings tab source dataset synapse linked service is selected from where data will be fetched.
+   Lookup activity is used to get the tables information. In the settings tab source dataset Synapse linked service is selected from where data will be fetched.
    In the query section query is written which fetches all the tables of given schema
    
 ![lookup-get-tables](./images/scenario2/lookup-get-tables.png)
@@ -220,8 +220,8 @@ You need to provide following parameters before for executing the pipeline
  
 #### Step3: Copy activity inside For each activity
  
- Copy actvity is used which gets the each table name from the synapse analytics and copies into the given blob storage account.
- Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
+ Copy actvity is used which gets the each table name from the Synapse Analytics and copies into the given blob storage account.
+ Copy activity source contains Synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
  
 ![copy-activity-source](./images/scenario2/copy-data-source.png)
 
@@ -263,7 +263,7 @@ Inside settings of web activity **logic app end point URL** is provided and requ
 
 
 
-#### Scenario3: Exporting all data from synapse analytics
+#### Scenario3: Exporting all data from Synapse Analytics
 
  Copy all data from  into azure blob storage with support of CSV, JSON, JSONL and PARQUET.
 
@@ -298,7 +298,7 @@ You need to provide following parameters before for executing the pipeline
 
 #### Step1: Lookup activity for getting tables list
    
-   Lookup activity is used to get the tables information. In the settings tab source dataset synapse linked service is selected from where data will be fetched.
+   Lookup activity is used to get the tables information. In the settings tab source dataset Synapse linked service is selected from where data will be fetched.
    In the query section query is written which fetches all the tables of given schema
    
 ![lookup-get-tables](./images/synapseDataExporter/sc3lookup.png)
@@ -315,8 +315,8 @@ Query is written for getting all schemas tables
  
 #### Step4: Copy activity inside For each activity
  
- Copy actvity is used which gets the each table name from the synapse analytics and copies into the given blob storage account.
- Copy activity source contains synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
+ Copy actvity is used which gets the each table name from the Synapse Analytics and copies into the given blob storage account.
+ Copy activity source contains Synapse linked service and takes values of schema name and table name by using tableName and schemaName parameters
  
 ![copy-activity-source](./images/synapseDataExporter/sc3copysource.png)
 

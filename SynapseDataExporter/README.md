@@ -3,7 +3,7 @@
 2. Architecture
 3. Technical details
 4. Pipeline workflow explanation for each scenario
-5. Setfup and Configure Notifications for MS Teams and Outlook using App logic
+5. Setup and Configure Notifications for MS Teams and Outlook using App logic
  
 
 ## Synapse Data Exporter
@@ -19,13 +19,13 @@ It’s helpful in the downstream model where there is a system built within an o
 
 #### 3. Technical Details
 
-The main use of synapse data exporter is to extract data from synapse analytics and store data in azure blob storage account with the support of **CSV**, **JSON**, **JSONL** and **PARQUET** formats.
+The main use of synapse data exporter is to extract data from Synapse Analytics and store data in azure blob storage account with the support of **CSV**, **JSON**, **JSONL** and **PARQUET** formats.
 
-This solution provides **03 scenarios** for exporting data from synapse analytics
+This solution provides **03 Scenarios** for exporting data from Synapse Analytics
 
-a. Export a specific table from synapse analytics
-b. Export specific schema from synapse analytics
-c. Export entire data from synapse analytics
+a. Export a specific table from Synapse Analytics
+b. Export specific schema from Synapse Analytics
+c. Export entire data from Synapse Analytics
      
      Total Pipelines: 3 use cases x 4 file formats = 12
      
